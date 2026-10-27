@@ -241,7 +241,28 @@ button:focus-visible,.camera-button:focus-within{outline:3px solid #0b62b855;out
 .launcher .foot{color:var(--muted);font-size:.82rem;text-align:center;margin:22px 0 0}
 .back-link{display:inline-flex;align-items:center;gap:6px;margin:0 0 10px;padding:8px 2px;color:var(--accent);font-weight:600;text-decoration:none;font-size:.95rem}
 @media (min-width:760px){.launcher .choices-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:1000px){.launcher .choices-grid{grid-template-columns:1fr 1fr 1fr}.app-card{flex-direction:column;align-items:flex-start;text-align:left}.app-card .arrow{display:none}}
 @media print{.launcher,.back-link{display:none!important}}
+
+.fiber-row{border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:0 0 12px;background:#fbfcfd;break-inside:avoid}
+#app-blocco .photo-grid .field{min-width:0}
+@media print{.fiber-row{border:1px solid #999;background:#fff!important;padding:4mm}#app-blocco section{break-inside:auto!important}}
+/* --- Rifiniture usabilità PC / mobile --- */
+.back-link{min-height:44px}
+.material-head .btn-remove{min-height:44px}
+.photo.drag-over,.mphoto.drag-over{border-color:var(--accent)!important;border-style:solid!important;background:var(--accent-soft)!important}
+.choice label:has(input:focus-visible){outline:3px solid #0b62b855;outline-offset:2px}
+@media (max-width:360px){
+  .btn-row{grid-template-columns:1fr 1fr}
+  .btn-row .danger{grid-column:1/-1}
+  .btn-row button{font-size:.95rem}
+}
+@media (hover:hover) and (pointer:fine){
+  .choice label:hover,.camera-button:hover,.app-card:hover{border-color:var(--accent)}
+  .secondary:hover{background:#f3f6f9}
+  .danger:hover{background:var(--err-soft)}
+}
+
 </style>
 </head>
 <body>
@@ -250,6 +271,7 @@ button:focus-visible,.camera-button:focus-within{outline:3px solid #0b62b855;out
 <div class="choices-grid">
 <a class="app-card" href="#riscontro"><span class="ico" aria-hidden="true">✅</span><span class="txt"><strong>Riscontro attività</strong><span class="desc">Rapporto di fine lavori con dati tecnici, materiali e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
 <a class="app-card" href="#sopralluogo"><span class="ico" aria-hidden="true">📋</span><span class="txt"><strong>Sopralluogo</strong><span class="desc">Verifica tecnica preliminare con soluzioni individuate e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
+<a class="app-card" href="#blocco"><span class="ico" aria-hidden="true">⚠️</span><span class="txt"><strong>Blocco tecnico On Field</strong><span class="desc">Sospensione dell’attivazione per problema ottico, con verifica fibre e foto del ROE</span></span><span class="arrow" aria-hidden="true">›</span></a>
 </div>
 <p class="foot">Apri questa pagina in Chrome o Safari, non dall’anteprima di WhatsApp o della mail.</p>
 </div>
@@ -373,6 +395,72 @@ button:focus-visible,.camera-button:focus-within{outline:3px solid #0b62b855;out
 <div class="status" id="sstatus"></div>
 <button class="primary btn-main" id="sbtnPdf" type="button">Genera PDF</button>
 <div class="btn-row"><button class="secondary" id="sbtnSave" type="button">Salva bozza</button><button class="secondary" id="sbtnLoad" type="button">Carica bozza</button><button class="danger" id="sbtnReset" type="button">Reset</button></div>
+</div>
+</div>
+</div>
+<div id="app-blocco" hidden>
+<div class="app">
+<a class="back-link no-print" href="#">‹ Torna alla scelta del modulo</a>
+<header><h1>Blocco tecnico On Field</h1><p>Sospensione dell’attivazione per problema ottico</p><div class="legend"><span><b>*</b> Sempre obbligatorio</span><span><b>**</b> Obbligatorio quando applicabile</span></div></header>
+
+<form id="bf" novalidate autocomplete="off">
+
+<section><h2><span class="num">1</span>Identificazione attività</h2>
+<div class="grid">
+<div class="field"><label for="b_wo">Codice OLO / W.O. / ID attività <span class="req">*</span></label><input id="b_wo" name="wo" autocapitalize="characters" data-text/><div class="err"></div></div>
+<div class="field"><label for="b_risorsa">ID risorsa <span class="req">*</span></label><input id="b_risorsa" name="risorsa" autocapitalize="characters" data-text/><div class="err"></div></div>
+<div class="field"><label for="b_data">Data <span class="req">*</span></label><input id="b_data" name="data" type="date"/><div class="err"></div></div>
+<div class="field"><label for="b_squadra">Squadra / impresa <span class="req">*</span></label><input id="b_squadra" name="squadra" data-text data-min-letters="2"/><div class="err"></div></div>
+<div class="field"><label for="b_tecnico">Tecnico <span class="req">*</span></label><input id="b_tecnico" name="tecnico" data-text data-min-letters="2"/><div class="err"></div></div>
+<div class="field full"><label for="b_indirizzo">Indirizzo completo <span class="req">*</span></label><input id="b_indirizzo" name="indirizzo" data-text data-min-letters="3"/><div class="err"></div></div>
+<div class="field"><label for="b_comune">Comune <span class="req">*</span></label><input id="b_comune" name="comune" data-text data-min-letters="2"/><div class="err"></div></div>
+</div>
+</section>
+
+<section><h2><span class="num">2</span>Blocco tecnico</h2>
+
+<div class="qblock"><div class="field"><label for="b_causa">Causa del blocco <span class="req">*</span></label><select id="b_causa" name="causa" data-select><option value="">Seleziona</option><option>Mancanza continuità tra ROE e CNO</option><option>Mancanza continuità tra CNO e PCN</option><option>Fibra interrotta o danneggiata</option><option>Attenuazione fuori soglia</option><option>Fibra/porte esaurite</option><option>Altro</option></select><div class="err"></div></div>
+<div class="conditional hidden" data-show-if="causa=Altro"><div class="field"><label for="b_causa_altro">Descrivere la causa <span class="cond">**</span></label><textarea id="b_causa_altro" name="causa_altro" data-text data-min-chars="8"></textarea><div class="err"></div></div></div></div>
+</section>
+
+<section><h2><span class="num">3</span>ROE e CNO di riferimento</h2>
+<div class="grid">
+<div class="field"><label for="b_roe">ROE di riferimento <span class="req">*</span></label><input id="b_roe" name="roe" autocapitalize="characters" placeholder="es. ROE 121" data-text data-need-digit/><div class="err"></div></div>
+<div class="field"><label for="b_cno">CNO di riferimento <span class="req">*</span></label><input id="b_cno" name="cno" autocapitalize="characters" placeholder="es. CNO2" data-text data-need-digit/><div class="err"></div></div>
+</div>
+<div class="qblock" style="margin-top:16px"><div class="field" data-group="roe_diverso"><label>Il ROE è diverso da quello indicato nella pratica su XME? <span class="req">*</span></label><div class="choice"><label><input name="roe_diverso" type="radio" value="SI"/> Sì</label><label><input name="roe_diverso" type="radio" value="NO"/> No</label></div><div class="err"></div></div>
+<div class="conditional hidden" data-show-if="roe_diverso=SI"><div class="field"><label for="b_roe_xme">ROE indicato nella pratica XME <span class="cond">**</span></label><input id="b_roe_xme" name="roe_xme" autocapitalize="characters" placeholder="es. ROE 111" data-text data-need-digit/><div class="err"></div></div></div></div>
+<div class="qblock"><div class="field"><label for="b_coordinate">Coordinate del ROE <span class="req">*</span></label><div class="gps-row"><input id="b_coordinate" name="coordinate" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" id="bbtnGps" type="button">📍 Rileva</button></div><div class="gps-status no-print" id="bgpsStatus">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>
+<div class="qblock"><p class="photo-area-title">Fotografie del ROE</p><div class="photo-grid">
+<div class="field" data-photo-field="roe_aperto"></div>
+<div class="field" data-photo-field="roe_chiuso"></div>
+</div></div>
+</section>
+
+<section><h2><span class="num">4</span>Verifica fibre</h2>
+<p class="section-intro">Inserire tutte le fibre utilizzate per le prove, con la porta del patch panel e l’esito. Almeno una fibra è obbligatoria.</p>
+<div id="fibers"></div>
+<button class="secondary add-material no-print" id="bbtnAddFiber" type="button">+ Aggiungi fibra</button>
+</section>
+
+<section><h2><span class="num">5</span>Stato impianto</h2>
+<div class="field" data-group="predisposto"><label>L’impianto è stato predisposto? <span class="req">*</span></label><div class="choice"><label><input name="predisposto" type="radio" value="Sì"/> Sì</label><label><input name="predisposto" type="radio" value="Parzialmente"/> Parzialmente</label><label><input name="predisposto" type="radio" value="No"/> No</label></div><div class="err"></div></div>
+</section>
+
+<section><h2><span class="num">6</span>Fotografie aggiuntive</h2>
+<p class="section-intro">Facoltative: allegare se utili a documentare il problema.</p>
+<div class="photo-grid">
+<div class="field" data-photo-field="cno"></div>
+<div class="field" data-photo-field="misure"></div>
+</div>
+</section>
+
+</form>
+
+<div class="bottom-actions no-print">
+<div class="status" id="bstatus"></div>
+<button class="primary btn-main" id="bbtnPdf" type="button">Genera PDF</button>
+<div class="btn-row"><button class="secondary" id="bbtnSave" type="button">Salva bozza</button><button class="secondary" id="bbtnLoad" type="button">Carica bozza</button><button class="danger" id="bbtnReset" type="button">Reset</button></div>
 </div>
 </div>
 </div>
@@ -705,11 +793,217 @@ window.__sopr={photos,validate,PHOTO_CFG};
 </script>
 <script>
 (function(){
- const L=document.getElementById('launcher'),R=document.getElementById('app-riscontro'),S=document.getElementById('app-sopralluogo');
- const TITLES={riscontro:'Riscontro attività',sopralluogo:'Sopralluogo'};
+const root=document.getElementById('app-blocco'),form=document.getElementById('bf'),statusBox=document.getElementById('bstatus');
+const DRAFT_KEY='bloccoTecnicoOnField';
+const COLORI=['Blu','Arancio','Verde','Marrone','Grigio','Bianco','Rosso','Nero','Giallo','Viola','Rosa','Turchese'];
+const ESITI=['Continuità OK','Nessuna continuità','Già utilizzata','Utilizzata per attivazione','Giuntata ma il laser non arriva'];
+
+/* ---------- Foto ---------- */
+const PHOTO_CFG={
+ roe_aperto:{min:1,max:1,req:true,label:'ROE aperto',hint:'Foto del ROE aperto con fibre e porte visibili.'},
+ roe_chiuso:{min:1,max:1,req:true,label:'ROE chiuso',hint:'Foto del ROE chiuso, con etichetta o identificativo leggibile.'},
+ cno:{min:0,req:false,label:'CNO',hint:'Facoltativa: foto del CNO.'},
+ misure:{min:0,req:false,label:'Misure (power meter / OTDR)',hint:'Facoltativa: foto delle misure effettuate.'}
+};
+const photos={};
+root.querySelectorAll('[data-photo-field]').forEach(f=>{
+ const k=f.dataset.photoField,c=PHOTO_CFG[k];photos[k]=[];
+ f.innerHTML=`<div class="mphoto"><h3>${c.label} ${c.req?'<span class="req">*</span>':'<span class="cond">(facoltativa)</span>'}</h3><small>${c.hint}</small>
+ <label class="camera-button no-print" for="bph_${k}">📷 ${c.max===1?'Scatta o carica foto':'Scatta o aggiungi foto'}</label>
+ <input accept="image/*" capture="environment" class="visually-hidden-input" id="bph_${k}" type="file" aria-label="${c.label}"/>
+ <div class="thumbs"></div><div class="counter"></div><div class="msg no-print"></div><div class="err own"></div></div>`;
+ f.querySelector('input').addEventListener('change',e=>addPhotos(k,[...e.target.files],e.target));
+ renderPhotos(k);
+});
+function renderPhotos(k){
+ const f=root.querySelector(`[data-photo-field="${k}"]`),box=f.querySelector('.mphoto'),c=PHOTO_CFG[k],list=photos[k];
+ const th=f.querySelector('.thumbs');th.innerHTML='';
+ list.forEach((p,i)=>{const fig=document.createElement('figure');fig.className='thumb';
+  fig.innerHTML=`<img alt="${c.label} ${i+1}" src="${p.src}"/><figcaption>${c.max===1?c.label:'Foto '+(i+1)}</figcaption><button type="button">Rimuovi</button>`;
+  fig.querySelector('button').addEventListener('click',()=>{if(!confirm('Rimuovere questa foto?'))return;list.splice(i,1);renderPhotos(k)});th.appendChild(fig)});
+ box.classList.toggle('ok',c.min>0?list.length>=c.min:list.length>0);
+ f.querySelector('.counter').textContent=c.max===1?(list.length?'Foto acquisita':'Nessuna foto'):(list.length+(list.length===1?' foto caricata':' foto caricate'));
+ if(list.length>=c.min)f.classList.remove('invalid');
+}
+function analyzePhoto(image){
+ const max=96,sc=Math.min(1,max/Math.max(image.naturalWidth,image.naturalHeight));
+ const w=Math.max(8,Math.round(image.naturalWidth*sc)),h=Math.max(8,Math.round(image.naturalHeight*sc));
+ const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(image,0,0,w,h);
+ const d=ctx.getImageData(0,0,w,h).data,n=w*h,L=new Float32Array(n);let sum=0,dark=0;
+ for(let i=0;i<n;i++){const y=0.2126*d[i*4]+0.7152*d[i*4+1]+0.0722*d[i*4+2];L[i]=y;sum+=y;if(y<35)dark++}
+ const mean=sum/n;let v=0;for(let i=0;i<n;i++)v+=(L[i]-mean)**2;const std=Math.sqrt(v/n);
+ let g=0,gc=0;for(let y=0;y<h-1;y++)for(let x=0;x<w-1;x++){const i=y*w+x;g+=Math.abs(L[i]-L[i+1])+Math.abs(L[i]-L[i+w]);gc+=2}
+ const edge=g/gc,darkFrac=dark/n;
+ if(mean<35&&(std<20||darkFrac>0.9))return 'La foto è nera o troppo scura: l’obiettivo potrebbe essere coperto. Rifai la foto usando il flash o una torcia.';
+ if(mean>240&&std<15)return 'La foto è bianca o sovraesposta: rifai la foto.';
+ if(std<10)return 'La foto è uniforme e non mostra dettagli: l’obiettivo potrebbe essere coperto. Rifai la foto.';
+ if(edge/Math.max(mean,20)<0.018)return 'La foto è priva di dettagli (obiettivo coperto o completamente sfocata). Rifai la foto.';
+ return '';
+}
+function readImage(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>res({img:i,src:r.result});i.onerror=()=>res({img:null,src:r.result});i.src=r.result};r.onerror=()=>res(null);r.readAsDataURL(file)})}
+async function addPhotos(k,files,input){
+ const f=root.querySelector(`[data-photo-field="${k}"]`),msg=f.querySelector('.msg'),box=f.querySelector('.mphoto'),c=PHOTO_CFG[k];msg.textContent='';box.classList.remove('bad');
+ if(c.max===1&&files.length>1)files=files.slice(-1);
+ for(const file of files){
+  const r=await readImage(file);if(!r)continue;let src=r.src;
+  if(r.img){let reason='';try{reason=analyzePhoto(r.img)}catch(e){}
+   if(reason){msg.textContent=reason;box.classList.add('bad');continue}
+   try{const M=1600,s=Math.min(1,M/Math.max(r.img.naturalWidth,r.img.naturalHeight));if(s<1||file.size>800000){const cv=document.createElement('canvas');cv.width=Math.round(r.img.naturalWidth*s);cv.height=Math.round(r.img.naturalHeight*s);cv.getContext('2d').drawImage(r.img,0,0,cv.width,cv.height);src=cv.toDataURL('image/jpeg',0.85)}}catch(e){}}
+  if(c.max===1)photos[k]=[{src,name:file.name}];else photos[k].push({src,name:file.name});
+ }
+ input.value='';renderPhotos(k);
+}
+
+/* ---------- Fibre ---------- */
+const fibersBox=document.getElementById('fibers');let fc=0;
+function renumberFibers(){const rows=[...fibersBox.querySelectorAll('.fiber-row')];rows.forEach((r,i)=>{r.querySelector('.material-head strong').textContent='Fibra '+(i+1);r.querySelector('.btn-remove').disabled=rows.length===1})}
+function addFiber(id){if(id)fc=Math.max(fc,id);else id=++fc;
+ const d=document.createElement('div');d.className='fiber-row';d.dataset.id=id;
+ d.innerHTML=`<div class="material-head"><strong>Fibra</strong><button type="button" class="danger btn-remove no-print">Rimuovi</button></div>
+<div class="grid3">
+<div class="field"><label for="b_fcol_${id}">Colore fibra <span class="req">*</span></label><select id="b_fcol_${id}" name="fcol_${id}" data-select><option value="">Seleziona</option>${COLORI.map(c=>`<option>${c}</option>`).join('')}</select><div class="err"></div></div>
+<div class="field"><label for="b_fpp_${id}">Porta patch panel (P.P.) <span class="req">*</span></label><input id="b_fpp_${id}" name="fpp_${id}" inputmode="numeric" placeholder="es. 255" data-text data-need-digit/><div class="err"></div></div>
+<div class="field"><label for="b_fes_${id}">Esito <span class="req">*</span></label><select id="b_fes_${id}" name="fes_${id}" data-select><option value="">Seleziona</option>${ESITI.map(c=>`<option>${c}</option>`).join('')}</select><div class="err"></div></div>
+</div>`;
+ fibersBox.appendChild(d);
+ d.querySelector('.btn-remove').addEventListener('click',()=>{if(fibersBox.querySelectorAll('.fiber-row').length<=1)return;if(!confirm('Rimuovere questa fibra?'))return;d.remove();renumberFibers()});
+ renumberFibers();return d}
+document.getElementById('bbtnAddFiber').addEventListener('click',()=>{const d=addFiber();d.querySelector('select').focus({preventScroll:true});d.scrollIntoView({behavior:'smooth',block:'center'})});
+
+/* ---------- Condizionati ---------- */
+function val(n){const e=form.elements[n];return e?e.value:''}
+function sync(){root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');c.classList.toggle('hidden',val(n)!==v)})}
+form.addEventListener('change',sync);
+form.addEventListener('input',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
+form.addEventListener('change',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
+
+/* ---------- GPS ---------- */
+document.getElementById('bbtnGps').addEventListener('click',()=>{
+ const st=document.getElementById('bgpsStatus'),inp=form.elements.coordinate;
+ if(!navigator.geolocation){st.textContent='Il dispositivo non supporta la geolocalizzazione: inserire le coordinate a mano.';return}
+ st.textContent='Rilevamento posizione in corso…';
+ navigator.geolocation.getCurrentPosition(p=>{inp.value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6);setErr(inp.closest('.field'),'');
+   st.textContent='Posizione rilevata (precisione circa '+Math.round(p.coords.accuracy)+' m).'+(p.coords.accuracy>50?' Precisione bassa: se possibile riprova all’aperto.':'')},
+  err=>{st.textContent=err.code===1?'Accesso alla posizione negato: consentilo nelle impostazioni del browser oppure inserisci le coordinate a mano.':'Posizione non disponibile: riprova o inserisci le coordinate a mano.'},
+  {enableHighAccuracy:true,timeout:20000,maximumAge:0});
+});
+
+/* ---------- Validazione ---------- */
+const BLACKLIST=['nd','na','nn','nc','no','si','sì','x','xx','xxx','nessuno','nessuna','niente','boh','nonso','sconosciuto','ignoto','vuoto','null','nullo','test','prova','nondisponibile','nonpresente','mancante','asd','aaa','zzz','ok'];
+function core(v){return v.toLowerCase().replace(/[\s.,;:_\-–—\/\\|*#'"`´’~+=()\[\]{}!?°^%&<>@$€]/g,'')}
+function junkReason(el){
+ const s=(el.value||'').trim();if(!s)return 'Campo obbligatorio.';const c=core(s);
+ if(!c)return 'Inserire un valore reale: simboli come . , - _ non sono accettati.';
+ if(!/[a-z0-9àèéìòù]/i.test(c))return 'Inserire un valore reale con lettere o numeri.';
+ if(/^0+$/.test(c))return 'Il valore 0 non è accettato: inserire il dato reale.';
+ if(BLACKLIST.includes(c)||/^([a-z])\1*$/i.test(c))return 'Valore non valido: inserire il dato reale.';
+ if(el.hasAttribute('data-need-digit')&&!/[1-9]/.test(c))return 'Inserire il numero identificativo (es. 121).';
+ const ml=+el.dataset.minLetters||0;if(ml&&(c.match(/[a-zàèéìòù]/gi)||[]).length<ml)return 'Inserire un valore reale (almeno '+ml+' lettere).';
+ const mc=+el.dataset.minChars||0;if(mc&&c.length<mc)return 'Descrizione troppo breve: inserire più dettagli.';
+ return '';
+}
+function coordReason(v){
+ if(!(v||'').trim())return 'Campo obbligatorio: premere “Rileva” o inserire le coordinate.';
+ const m=v.trim().replace(/\s+/g,' ').match(/^(-?\d{1,2}[.,]\d+)\s*[,; ]\s*(-?\d{1,3}[.,]\d+)$/);
+ if(!m)return 'Formato non valido: usare latitudine, longitudine (es. 46.170123, 9.871234).';
+ const lat=parseFloat(m[1].replace(',','.')),lon=parseFloat(m[2].replace(',','.'));
+ if(lat<35||lat>47.5||lon<6||lon>19)return 'Coordinate fuori dall’Italia: verificare (forse latitudine e longitudine sono invertite).';
+ const dec=s=>(s.split(/[.,]/)[1]||'').length;if(dec(m[1])<4||dec(m[2])<4)return 'Coordinate troppo approssimative: servono almeno 4 decimali.';
+ return '';
+}
+function setErr(f,msg){if(!f)return;f.classList.toggle('invalid',!!msg);const e=f.querySelector('.err');if(e)e.textContent=msg||''}
+function visible(el){return !el.closest('.hidden')}
+function validate(){
+ root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));
+ const bad=[];const fail=(f,m)=>{setErr(f,m);bad.push(f)};
+ if(!fibersBox.querySelector('.fiber-row'))addFiber();
+ for(const f of form.querySelectorAll('.field')){
+  if(!visible(f))continue;
+  const grp=f.dataset.group;
+  if(grp){if(![...form.querySelectorAll(`[name="${grp}"]`)].some(e=>e.checked))fail(f,'Selezionare una risposta.');continue}
+  if(f.dataset.photoField){const k=f.dataset.photoField,c=PHOTO_CFG[k];if(photos[k].length<c.min)fail(f,'Foto obbligatoria.');continue}
+  const sel=f.querySelector('select[data-select]');if(sel){if(!sel.value)fail(f,'Selezionare una voce.');continue}
+  const el=f.querySelector('input:not([type=checkbox]):not([type=radio]),textarea');if(!el)continue;
+  if(el.hasAttribute('data-coord')){const r=coordReason(el.value);if(r)fail(f,r);continue}
+  if(el.type==='date'){if(!el.value)fail(f,'Campo obbligatorio.');continue}
+  if(el.hasAttribute('data-text')){const r=junkReason(el);if(r)fail(f,r)}
+ }
+ return bad;
+}
+function showStatus(type,msg){statusBox.className='status '+type;statusBox.textContent=msg}
+
+/* ---------- PDF ---------- */
+document.getElementById('bbtnPdf').addEventListener('click',async()=>{
+ const bad=validate();
+ if(bad.length){showStatus('err',(bad.length===1?'C’è 1 campo da correggere':'Ci sono '+bad.length+' campi da correggere')+' prima di generare il PDF.');
+  const el=bad[0].querySelector('input:not([type=file]),select,textarea');try{el&&el.focus({preventScroll:true})}catch(e){}
+  bad[0].scrollIntoView({behavior:'smooth',block:'center'});return}
+ showStatus('ok','Controllo completato. Nella finestra di stampa seleziona “Salva come PDF”.');
+ const imgs=[...root.querySelectorAll('.thumb img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
+ const old=document.title,olo=val('wo').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Blocco tecnico On Field';
+ const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
+ setTimeout(()=>window.print(),250);
+});
+
+/* ---------- Bozza / Reset ---------- */
+function todayLocal(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+document.getElementById('bbtnSave').addEventListener('click',()=>{
+ const data={_fibers:[...fibersBox.querySelectorAll('.fiber-row')].map(r=>+r.dataset.id)};
+ [...form.elements].forEach(e=>{if(!e.name||e.type==='file')return;if(e.type==='radio'){if(e.checked)data[e.name]=e.value}else data[e.name]=e.value});
+ try{localStorage.setItem(DRAFT_KEY,JSON.stringify(data));showStatus('ok','Bozza salvata su questo dispositivo. Le fotografie, per sicurezza, dovranno essere ricaricate.')}catch(e){showStatus('err','Impossibile salvare la bozza su questo dispositivo (memoria del browser non disponibile o piena).')}
+});
+document.getElementById('bbtnLoad').addEventListener('click',()=>{
+ let raw=null;try{raw=localStorage.getItem(DRAFT_KEY)}catch(e){}
+ if(!raw)return showStatus('err','Nessuna bozza salvata su questo dispositivo.');
+ let data;try{data=JSON.parse(raw)}catch(e){return showStatus('err','La bozza salvata non è leggibile.')}
+ if(Array.isArray(data._fibers)&&data._fibers.length){fibersBox.innerHTML='';fc=0;data._fibers.forEach(id=>addFiber(id))}
+ [...form.elements].forEach(e=>{if(!e.name||e.type==='file'||!(e.name in data))return;const v=data[e.name];if(e.type==='radio')e.checked=e.value===v;else e.value=v});
+ sync();root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));showStatus('ok','Bozza caricata. Ricaricare le fotografie prima di generare il PDF.');
+});
+document.getElementById('bbtnReset').addEventListener('click',()=>{
+ if(!confirm('Reset: cancellare tutti i campi e le fotografie?'))return;
+ form.reset();Object.keys(photos).forEach(k=>{photos[k]=[];renderPhotos(k);const f=root.querySelector(`[data-photo-field="${k}"]`);f.querySelector('.msg').textContent='';f.querySelector('.mphoto').classList.remove('bad')});
+ fibersBox.innerHTML='';fc=0;addFiber();form.elements.data.value=todayLocal();
+ document.getElementById('bgpsStatus').textContent='Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.';
+ root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));sync();statusBox.className='status';statusBox.textContent='';window.scrollTo({top:0});
+});
+
+addFiber();form.elements.data.value=todayLocal();sync();
+window.__blocco={photos,validate,addFiber};
+})();
+</script>
+<script>
+(function(){
+ const L=document.getElementById('launcher'),R=document.getElementById('app-riscontro'),S=document.getElementById('app-sopralluogo'),B=document.getElementById('app-blocco');
+ const TITLES={riscontro:'Riscontro attività',sopralluogo:'Sopralluogo',blocco:'Blocco tecnico On Field'};
  function show(){const k=(location.hash||'').replace('#','');const name=TITLES[k]?k:'';
-  L.hidden=!!name;R.hidden=name!=='riscontro';S.hidden=name!=='sopralluogo';document.title=name?TITLES[name]:'Rilievi';window.scrollTo(0,0)}
+  L.hidden=!!name;R.hidden=name!=='riscontro';S.hidden=name!=='sopralluogo';B.hidden=name!=='blocco';document.title=name?TITLES[name]:'Rilievi';window.scrollTo(0,0)}
  window.addEventListener('hashchange',show);show();
+})();
+</script>
+<script>
+/* Rifiniture usabilità PC / mobile (comuni ai due moduli) */
+(function(){
+ const desktop=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+ /* Testi dei pulsanti foto adeguati al dispositivo */
+ function adaptTexts(scope){
+  if(!desktop)return;
+  scope.querySelectorAll('.camera-hint').forEach(e=>{if(!e.dataset.pc){e.dataset.pc=1;e.textContent='Clicca il pulsante per scegliere la foto dal computer, oppure trascinala in questo riquadro.'}});
+  scope.querySelectorAll('.mphoto small').forEach(e=>{if(!e.dataset.pc){e.dataset.pc=1;e.textContent=e.textContent.replace('Tocca il pulsante per ogni foto da aggiungere.','Clicca il pulsante o trascina qui le foto (anche più di una).')}});
+  scope.querySelectorAll('.mphoto input[type=file]').forEach(e=>{e.multiple=true});
+  scope.querySelectorAll('label.camera-button').forEach(e=>{if(!e.dataset.pc){e.dataset.pc=1;e.textContent=e.textContent.replace(/Scatta o carica foto|Scatta o aggiungi foto/,'Scegli foto').replace('Scatta foto e leggi codice','Scegli foto e leggi codice')}});
+ }
+ adaptTexts(document);
+ new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)adaptTexts(n)}))).observe(document.body,{childList:true,subtree:true});
+ /* Su PC: le foto si possono trascinare nel riquadro */
+ function boxOf(t){return t&&t.closest?t.closest('.photo,.mphoto'):null}
+ document.addEventListener('dragover',e=>{const b=boxOf(e.target);if(b&&e.dataTransfer&&[...e.dataTransfer.types].includes('Files')){e.preventDefault();b.classList.add('drag-over')}});
+ document.addEventListener('dragleave',e=>{const b=boxOf(e.target);if(b&&!b.contains(e.relatedTarget))b.classList.remove('drag-over')});
+ document.addEventListener('drop',e=>{const b=boxOf(e.target);if(!b)return;e.preventDefault();b.classList.remove('drag-over');
+  const inp=b.querySelector('input[type=file]');const files=[...(e.dataTransfer?.files||[])].filter(f=>f.type.startsWith('image/'));if(!inp||!files.length)return;
+  const dt=new DataTransfer();(b.classList.contains('mphoto')?files:files.slice(0,1)).forEach(f=>dt.items.add(f));inp.files=dt.files;inp.dispatchEvent(new Event('change',{bubbles:true}))});
+ /* Su PC: la rotellina del mouse non modifica per errore i campi numerici */
+ document.addEventListener('wheel',e=>{const t=e.target;if(t&&t.matches&&t.matches('input[type=number]')&&document.activeElement===t)t.blur()},{passive:true});
 })();
 </script>
 </body>
