@@ -228,6 +228,96 @@ button:focus-visible,.camera-button:focus-within{outline:3px solid #0b62b855;out
 }
 
 
+
+/* --- Sopralluogo: soluzioni --- */
+.solutions-intro{margin:22px 2px 10px}
+.solutions-title{border:0;padding:0;margin:0 0 4px;font-size:1.2rem}
+.solution{border:1.5px solid var(--line-strong);border-radius:var(--radius);background:var(--surface);margin:0 0 12px;overflow:hidden}
+.solution.open{border-color:var(--accent)}
+.sol-head{display:flex;align-items:center;gap:10px;width:100%;min-height:58px;padding:12px 16px;background:var(--surface);color:var(--ink);border:0;border-radius:0;text-align:left;font-size:1.05rem}
+.solution.open .sol-head{background:var(--accent-soft)}
+.sol-title{flex:1;font-weight:700}
+.sol-state{flex:none;font-size:.8rem;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--cond-soft);color:var(--cond);border:1px solid #ecdcbc}
+.solution.done .sol-state{background:var(--ok-soft);color:var(--ok);border-color:#bfe3cf}
+.sol-chev{flex:none;color:var(--steel);transition:transform .15s}
+.solution.open .sol-chev{transform:rotate(180deg)}
+.sol-body{padding:12px 12px 4px;background:var(--page)}
+.sol-body section{margin-bottom:12px}
+.sol-remove{width:100%;min-height:46px;margin:0 0 10px}
+@media screen{.solution:not(.open) .sol-body{display:none}}
+@media print{
+  .solutions-intro .section-intro,.sol-state,.sol-chev{display:none!important}
+  .solution{border:0;border-radius:0;overflow:visible;margin:0 0 4mm}
+  .sol-head{min-height:0;padding:3mm 0 2mm;background:#fff!important;border-bottom:2px solid #13293d;font-size:13pt}
+  .sol-body{padding:3mm 0 0;background:#fff}
+  .solution + .solution{break-before:page}
+}
+
+.nested-q{margin-top:4px;padding-top:4px;border-top:1px dashed #e3d3ad}
+.nested-q .qblock{padding:12px 0}
+.sol-none{display:flex;align-items:center;gap:10px;min-height:48px;margin:0 0 12px;padding:10px 14px;border:1.5px dashed var(--line-strong);border-radius:8px;background:var(--surface);font-weight:600;cursor:pointer}
+.sol-none:has(input:checked){border-style:solid;border-color:var(--steel);background:#eef2f5}
+.solution.none .sol-state{background:#eef2f5;color:var(--steel);border-color:var(--line-strong)}
+@media print{.sol-none{border:0;padding:0;min-height:0}.solution.none .sol-none{font-weight:700}.solution:not(.none) .sol-none{display:none}}
+
+/* --- Sopralluogo: casella soluzione non presente in rosso --- */
+.sol-none{color:var(--err);border-color:#e7b9b4}
+.sol-none:has(input:checked){border-color:var(--err);background:var(--err-soft);color:var(--err)}
+.sol-none input{accent-color:var(--err)}
+.solution.none .sol-state{background:var(--err-soft);color:var(--err);border-color:#e7b9b4}
+/* --- Sopralluogo: finestra testo XME --- */
+body.modal-open{overflow:hidden}
+.xme-overlay{position:fixed;inset:0;z-index:100;background:rgba(19,41,61,.55);display:flex;align-items:center;justify-content:center;padding:14px}
+.xme-box{background:var(--surface);border-radius:var(--radius);width:100%;max-width:720px;max-height:calc(100vh - 28px);display:flex;flex-direction:column;gap:10px;padding:18px;box-shadow:0 10px 40px #0005}
+.xme-box h2{margin:0;padding:0;border:0;font-size:1.2rem}
+.xme-help{margin:0;color:var(--muted);font-size:.9rem}
+#sxmeText,#bxmeText,#rxmeText{flex:1;min-height:240px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.45;background:#f6f8fa;color:var(--ink);white-space:pre-wrap;overflow:auto;resize:none}
+.xme-msg{font-size:.9rem;font-weight:600;min-height:1.2em}
+.xme-msg.ok{color:var(--ok)}.xme-msg.err{color:var(--err)}
+.xme-actions{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.xme-actions button{min-height:50px}
+@media (max-width:520px){.xme-actions{grid-template-columns:1fr 1fr}.xme-actions .primary{grid-column:1/-1}.xme-box{padding:14px}#sxmeText,#bxmeText,#rxmeText{font-size:13px}}
+/* --- Sopralluogo: report compatto per il PDF --- */
+.report{display:none}
+@media print{
+  #app-sopralluogo #sf,#app-sopralluogo .solutions-intro,#app-blocco #bf,#app-riscontro #reportForm{display:none!important}
+  #app-sopralluogo .report,#app-blocco .report,#app-riscontro .report{display:block;font-size:9pt;line-height:1.3;color:#13293d}
+  #app-sopralluogo header,#app-blocco header,#app-riscontro header{display:none!important}
+  .rp-table.rp-fibre th,.rp-table.rp-fibre td{width:auto}
+  .rp-fibre thead th{background:#eef2f5!important;color:#46607a;font-size:8pt;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-table.rp-fibre td:first-child,.rp-table.rp-fibre th:first-child{width:8mm;text-align:center}
+  .rp-text{margin:0;padding:1.5mm 2mm;white-space:pre-wrap;border-bottom:1px solid #d6dee6}
+  .rp-alert{margin:0 0 4mm;padding:2.5mm 3.5mm;border:1.5px solid #b42318;background:#fdeceb!important;color:#b42318!important;font-weight:700;font-size:9.5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-alert div{margin-top:.8mm}
+  .rp-table tr.alert th,.rp-table tr.alert td{color:#b42318!important;background:#fdeceb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-hero{background:#13293d!important;color:#fff;padding:5mm 6mm 5.5mm;margin-bottom:5mm;position:relative;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.2mm;background:linear-gradient(90deg,#1f6fd1 0 25%,#e8780c 25% 50%,#2e9a4b 50% 75%,#8a5a35 75%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-hero h1{margin:0;font-size:16pt;line-height:1.2;color:#fff}
+  .rp-addr{margin:1.5mm 0 0;font-size:11pt;font-weight:600;color:#fff}
+  .rp-meta{display:flex;flex-wrap:wrap;gap:1mm 7mm;margin:2mm 0 0;font-size:9pt;color:#c9d6e3}
+  .rp-meta b{color:#fff;font-weight:700;margin-left:1mm}
+  .rp-sec{margin-bottom:4mm}
+  .rp-title{display:flex;align-items:center;gap:3mm;margin:0 0 2mm;padding:1.5mm 3mm;background:#13293d!important;color:#fff;font-size:11pt;break-after:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-title span{display:inline-grid;place-items:center;width:6mm;height:6mm;border-radius:1.5mm;background:#fff;color:#13293d;font-size:9pt}
+  .rp-table{width:100%;border-collapse:collapse}
+  .rp-table tr{break-inside:avoid}
+  .rp-table th,.rp-table td{border-bottom:1px solid #d6dee6;padding:.9mm 2mm;text-align:left;vertical-align:top}
+  .rp-table th{width:42%;font-weight:600;color:#46607a}
+  .rp-table td{font-weight:600;white-space:pre-wrap}
+  .rp-table tr.lvl1 th{padding-left:7mm}
+  .rp-table tr.lvl2 th{padding-left:12mm}
+  .rp-table tr.long td{font-weight:400}
+  .rp-none{margin:0;padding:2mm 3mm;border:1px solid #b42318;color:#b42318!important;font-weight:700}
+  .rp-gallery{margin-top:5mm}
+  .rp-group{margin-top:5mm}
+  .rp-group:first-of-type{margin-top:3mm}
+  .rp-sub{margin:0;padding:1.8mm 3mm;background:#0b62b8!important;color:#fff;font-size:10.5pt;font-weight:700;break-after:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rp-sub + .rp-photos{margin-top:2mm}
+  .rp-photos{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-top:3mm}
+  .rp-photos figure{margin:0;break-inside:avoid;border:1px solid #b9c6d2;padding:1.5mm}
+  .rp-photos img{display:block;width:100%;height:108mm;object-fit:contain;background:#fff}
+  .rp-photos figcaption{font-size:8pt;color:#46607a;padding-top:1mm}
+}
 /* --- Rilievi: schermata di scelta --- */
 [hidden]{display:none!important}
 .launcher .choices-grid{display:grid;gap:14px;margin-top:4px}
@@ -301,7 +391,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div class="field"><label for="f_inizio">Ora inizio <span class="req">*</span></label><input id="f_inizio" name="inizio" required="" type="time"/></div>
 <div class="field"><label for="f_fine">Ora fine <span class="req">*</span></label><input id="f_fine" name="fine" required="" type="time"/></div>
 <div class="field"><label for="f_squadra">Squadra / impresa <span class="req">*</span></label><input id="f_squadra" name="squadra" required=""/></div>
-<div class="field"><label for="f_tecnico">Tecnico responsabile <span class="req">*</span></label><input id="f_tecnico" name="tecnico" required=""/></div>
+<div class="field"><label for="f_tecnico">Tecnico <span class="req">*</span></label><input id="f_tecnico" name="tecnico" required=""/></div>
 <div class="field"><label for="f_wo">Codice OLO / W.O. / ID attività <span class="req">*</span></label><input id="f_wo" name="wo" required=""/></div>
 <div class="field span2"><label for="f_cliente">ID risorsa <span class="req">*</span></label><input id="f_cliente" name="cliente" required=""/></div>
 <div class="field full"><label for="f_indirizzo">Indirizzo completo <span class="req">*</span></label><input id="f_indirizzo" name="indirizzo" required=""/></div>
@@ -311,7 +401,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <section><h2><span class="num">2</span>Opere civili</h2>
 <div class="field"><label>È stato eseguito uno scavo? <span class="req">*</span></label><div class="choice"><label><input name="scavo" required="" type="radio" value="si"/> Sì</label><label><input name="scavo" type="radio" value="no"/> No</label></div></div>
 <div class="grid conditional hidden" id="scavoFields">
-<div class="field"><label for="f_metri_scavo">Lunghezza scavo in metri <span class="cond">**</span></label><input data-cond-required="" min="0.01" id="f_metri_scavo" name="metri_scavo" step="0.01" type="number"/></div>
+<div class="field"><label for="f_metri_scavo">Metri di scavo eseguiti <span class="cond">**</span></label><input data-cond-required="" min="0.01" id="f_metri_scavo" name="metri_scavo" step="0.01" type="number"/></div>
 <div class="field"><label for="f_superficie">Superficie <span class="cond">**</span></label><select data-cond-required="" id="f_superficie" name="superficie"><option value="">Seleziona</option><option>Asfalto</option><option>Marciapiede</option><option>Sterrato</option><option>Altro</option></select></div>
 <div class="field"><label for="f_ripristino">Ripristino completato <span class="cond">**</span></label><select data-cond-required="" id="f_ripristino" name="ripristino"><option value="">Seleziona</option><option>Sì</option><option>No</option><option>Non applicabile</option></select></div>
 <div class="field"><label for="f_note_scavo">Note scavo</label><input id="f_note_scavo" name="note_scavo"/></div>
@@ -320,9 +410,9 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <section><h2><span class="num">3</span>Cavi utilizzati</h2><div class="field"><label>È stato utilizzato del cavo? <span class="req">*</span></label><div class="choice"><label><input name="cavo_usato" required="" type="radio" value="si"/> Sì</label><label><input name="cavo_usato" type="radio" value="no"/> No</label></div></div>
 <div class="grid conditional hidden" id="caviFields"><div class="field"><label for="f_cavo_principale">Tipologia cavo principale <span class="cond">**</span></label><select data-cond-required="" id="f_cavo_principale" name="cavo_principale"><option value="">Seleziona</option><option>Non applicabile</option><option>Microcavo</option><option>Microcavo CPR</option><option>Multifibra</option></select></div><div class="field"><label for="f_cavo_principale_mt">Metri cavo principale <span class="cond">**</span></label><input data-cond-required="" id="f_cavo_principale_mt" inputmode="decimal" min="0.01" name="cavo_principale_mt" step="0.01" type="number"/></div><div class="field"><label for="f_tipo_monofibra">Tipologia monofibra <span class="cond">**</span></label><select data-cond-required="" id="f_tipo_monofibra" name="tipo_monofibra"><option value="">Seleziona</option><option>Monofibra da interno</option><option>Monofibra da esterno</option></select></div><div class="field"><label for="f_monofibra_mt">Metri monofibra <span class="cond">**</span></label><input data-cond-required="" id="f_monofibra_mt" inputmode="decimal" min="0.01" name="monofibra_mt" step="0.01" type="number"/></div><p class="muted full">Se il cavo principale è “Non applicabile” il campo metri si disattiva; negli altri casi i metri sono obbligatori.</p></div>
 </section>
-<section><h2><span class="num">4</span>Elementi di rete: ROE e CNO</h2><div class="subgroup" data-subgroup="ROE"><h3 class="subgroup-title"><span class="sg-badge">ROE</span>Informazioni sul ROE</h3><div class="grid"><div class="field"><label for="f_roe_num">Numero <span class="req">*</span></label><input id="f_roe_num" name="roe_num" required="" autocapitalize="characters" placeholder="es. ROE 121" data-need-digit=""/></div><div class="field"><label for="f_roe_pos">Posizione <span class="req">*</span></label><select id="f_roe_pos" name="roe_pos" required=""><option value="">Seleziona</option><option>Palifica</option><option>Facciata edificio</option><option>Pozzetto</option></select></div><div class="field full"><label for="f_roe_coord">Coordinate <span class="req">*</span></label><div class="gps-row"><input id="f_roe_coord" name="roe_coord" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord="" required=""/><button class="secondary no-print gps-btn" data-gps-for="f_roe_coord" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="f_roe_coord">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div></div><div class="field"><label for="f_roe_fibra">Fibra utilizzata <span class="req">*</span></label><select id="f_roe_fibra" name="roe_fibra" required=""><option value="">Seleziona</option><option>Blu</option><option>Arancio</option><option>Verde</option><option>Marrone</option><option>Grigio</option><option>Bianco</option><option>Rosso</option><option>Nero</option><option>Giallo</option><option>Viola</option><option>Rosa</option><option>Turchese</option></select></div><div class="field"><label for="f_roe_porta">Porta utilizzata <span class="req">*</span></label><input id="f_roe_porta" name="roe_porta" required="" inputmode="numeric" data-need-digit=""/></div><div class="field"><label for="f_roe_stato">Stato <span class="req">*</span></label><select id="f_roe_stato" name="roe_stato" required=""><option value="">Seleziona</option><option>Integro</option><option>Danneggiato</option><option>Non identificabile</option><option>Altro</option></select></div></div><div class="section-photo-area"><h3 class="photo-area-title">Fotografie ROE</h3><div class="photo-grid"><div class="photo"><h3>ROE aperto <span class="req">*</span></h3><small>ROE aperto con fibre e porte visibili.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_roe_aperto">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_roe_aperto" name="foto_roe_aperto" type="file"/><img alt="ROE aperto" class="preview"/></div><div class="photo"><h3>ROE chiuso <span class="req">*</span></h3><small>ROE chiuso con etichetta o identificativo leggibile.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_roe_chiuso">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_roe_chiuso" name="foto_roe_chiuso" type="file"/><img alt="ROE chiuso" class="preview"/></div></div></div></div><div class="subgroup" data-subgroup="CNO"><h3 class="subgroup-title"><span class="sg-badge">CNO</span>Informazioni sul CNO</h3><div class="grid"><div class="field"><label for="f_cno_num">Numero <span class="req">*</span></label><input id="f_cno_num" name="cno_num" required="" autocapitalize="characters" placeholder="es. CNO2" data-need-digit=""/></div><div class="field"><label for="f_cno_perm">Porta permutatore <span class="req">*</span></label><input id="f_cno_perm" name="cno_perm" required="" data-need-digit=""/></div><div class="field"><label for="f_cno_split">Nome / codice splitter <span class="req">*</span></label><input id="f_cno_split" name="cno_split" required="" autocapitalize="characters"/></div><div class="field"><label for="f_cno_split_porta">Porta splitter <span class="req">*</span></label><input id="f_cno_split_porta" name="cno_split_porta" required="" data-need-digit=""/></div></div><div class="section-photo-area"><h3 class="photo-area-title">Fotografie CNO</h3><div class="photo-grid"><div class="photo"><h3>Porta permutatore <span class="req">*</span></h3><small>Porta e identificazione visibili.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_perm">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_perm" name="foto_perm" type="file"/><img alt="Porta permutatore" class="preview"/></div><div class="photo"><h3>Porta splitter <span class="req">*</span></h3><small>Porta e codice splitter visibili.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_split">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_split" name="foto_split" type="file"/><img alt="Porta splitter" class="preview"/></div><div class="photo"><h3>ID risorsa installata <span class="req">*</span></h3><small>Etichetta con codice interamente leggibile.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_id">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_id" name="foto_id" type="file"/><img alt="ID risorsa CNO" class="preview"/></div></div></div></div><div class="subgroup"><div class="grid"><div class="field"><label for="f_etichette">Etichette verificate <span class="req">*</span></label><select id="f_etichette" name="etichette" required=""><option value="">Seleziona</option><option>Coerenti</option><option>Non coerenti</option><option>Assenti</option></select></div><div class="field"><label for="f_note_rete">Note</label><input id="f_note_rete" name="note_rete"/></div></div></div></section>
+<section><h2><span class="num">4</span>Elementi di rete: ROE e CNO</h2><div class="subgroup" data-subgroup="ROE"><h3 class="subgroup-title"><span class="sg-badge">ROE</span>Informazioni sul ROE</h3><div class="grid"><div class="field"><label for="f_roe_num">Numero <span class="req">*</span></label><input id="f_roe_num" name="roe_num" required="" autocapitalize="characters" placeholder="es. ROE 121" data-need-digit=""/></div><div class="field"><label>Diverso da quello indicato nella pratica XME? <span class="req">*</span></label><div class="choice"><label><input name="roe_xme_diverso" required="" type="radio" value="si"/> Sì</label><label><input name="roe_xme_diverso" type="radio" value="no"/> No</label></div></div><div class="conditional hidden full" id="roeXmeFields"><div class="field"><label for="f_roe_xme">ROE da pratica XME <span class="cond">**</span></label><input data-cond-required="" id="f_roe_xme" name="roe_xme" autocapitalize="characters" placeholder="es. ROE 111" data-need-digit=""/></div></div><div class="field"><label for="f_roe_pos">Posizione <span class="req">*</span></label><select id="f_roe_pos" name="roe_pos" required=""><option value="">Seleziona</option><option>Palifica</option><option>Facciata edificio</option><option>Pozzetto</option></select></div><div class="field full"><label for="f_roe_coord">Coordinate <span class="req">*</span></label><div class="gps-row"><input id="f_roe_coord" name="roe_coord" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord="" required=""/><button class="secondary no-print gps-btn" data-gps-for="f_roe_coord" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="f_roe_coord">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div></div><div class="field"><label for="f_roe_fibra">Colore fibra <span class="req">*</span></label><select id="f_roe_fibra" name="roe_fibra" required=""><option value="">Seleziona</option><option>Blu</option><option>Arancio</option><option>Verde</option><option>Marrone</option><option>Grigio</option><option>Bianco</option><option>Rosso</option><option>Nero</option><option>Giallo</option><option>Viola</option><option>Rosa</option><option>Turchese</option></select></div><div class="field"><label for="f_roe_porta">Porta utilizzata <span class="req">*</span></label><input id="f_roe_porta" name="roe_porta" required="" inputmode="numeric" data-need-digit=""/></div><div class="field"><label for="f_roe_stato">Stato <span class="req">*</span></label><select id="f_roe_stato" name="roe_stato" required=""><option value="">Seleziona</option><option>Integro</option><option>Danneggiato</option><option>Non identificabile</option><option>Altro</option></select></div></div><div class="section-photo-area"><h3 class="photo-area-title">Fotografie ROE</h3><div class="photo-grid"><div class="photo"><h3>ROE aperto <span class="req">*</span></h3><small>ROE aperto con fibre e porte visibili.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_roe_aperto">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_roe_aperto" name="foto_roe_aperto" type="file"/><img alt="ROE aperto" class="preview"/></div><div class="photo"><h3>ROE chiuso <span class="req">*</span></h3><small>ROE chiuso con etichetta o identificativo leggibile.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_roe_chiuso">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_roe_chiuso" name="foto_roe_chiuso" type="file"/><img alt="ROE chiuso" class="preview"/></div></div></div></div><div class="subgroup" data-subgroup="CNO"><h3 class="subgroup-title"><span class="sg-badge">CNO</span>Informazioni sul CNO</h3><div class="grid"><div class="field"><label for="f_cno_num">Numero <span class="req">*</span></label><input id="f_cno_num" name="cno_num" required="" autocapitalize="characters" placeholder="es. CNO2" data-need-digit=""/></div><div class="field"><label for="f_cno_perm">Porta permutatore (P.P.) <span class="req">*</span></label><input id="f_cno_perm" name="cno_perm" required="" data-need-digit=""/></div><div class="field"><label for="f_cno_split">Nome / codice splitter <span class="req">*</span></label><input id="f_cno_split" name="cno_split" required="" autocapitalize="characters"/></div><div class="field"><label for="f_cno_split_porta">Porta splitter <span class="req">*</span></label><input id="f_cno_split_porta" name="cno_split_porta" required="" data-need-digit=""/></div></div><div class="section-photo-area"><h3 class="photo-area-title">Fotografie CNO</h3><div class="photo-grid"><div class="photo"><h3>Porta permutatore <span class="req">*</span></h3><small>Porta e identificazione visibili.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_perm">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_perm" name="foto_perm" type="file"/><img alt="Porta permutatore" class="preview"/></div><div class="photo"><h3>Porta splitter <span class="req">*</span></h3><small>Porta e codice splitter visibili.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_split">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_split" name="foto_split" type="file"/><img alt="Porta splitter" class="preview"/></div><div class="photo"><h3>ID risorsa installata <span class="req">*</span></h3><small>Etichetta con codice interamente leggibile.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_id">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" data-photo-required="" id="foto_id" name="foto_id" type="file"/><img alt="ID risorsa CNO" class="preview"/></div></div></div></div><div class="subgroup"><div class="grid"><div class="field"><label for="f_etichette">Etichette verificate <span class="req">*</span></label><select id="f_etichette" name="etichette" required=""><option value="">Seleziona</option><option>Coerenti</option><option>Non coerenti</option><option>Assenti</option></select></div><div class="field"><label for="f_note_rete">Note</label><input id="f_note_rete" name="note_rete"/></div></div></div></section>
 <section><h2><span class="num">5</span>Diramatore</h2><div class="field"><label>Collegamento a diramatore? <span class="req">*</span></label><div class="choice"><label><input name="diramatore" required="" type="radio" value="si"/> Sì</label><label><input name="diramatore" type="radio" value="no"/> No</label><label><input name="diramatore" type="radio" value="na"/> Non applicabile</label></div></div>
-<div class="grid conditional hidden" id="dirFields"><div class="field"><label for="f_cod_dir">Nome / codice diramatore <span class="cond">**</span></label><input data-cond-required="" id="f_cod_dir" name="cod_dir"/></div><div class="field"><label for="f_ubic_dir">Ubicazione <span class="cond">**</span></label><input data-cond-required="" id="f_ubic_dir" name="ubic_dir"/></div><div class="field full"><label for="f_dir_coord">Coordinate <span class="cond">**</span></label><div class="gps-row"><input id="f_dir_coord" name="dir_coord" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord="" data-cond-required=""/><button class="secondary no-print gps-btn" data-gps-for="f_dir_coord" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="f_dir_coord">Premi “Rileva” davanti al diramatore per inserire la posizione GPS, oppure scrivi le coordinate.</div></div><div class="field"><label for="f_io_dir">Ingresso / uscita utilizzata <span class="cond">**</span></label><input data-cond-required="" id="f_io_dir" name="io_dir"/></div><div class="field"><label for="f_note_dir">Note</label><input id="f_note_dir" name="note_dir"/></div></div>
+<div class="grid conditional hidden" id="dirFields"><div class="field"><label for="f_cod_dir">Nome / codice diramatore <span class="cond">**</span></label><input data-cond-required="" id="f_cod_dir" name="cod_dir"/></div><div class="field"><label for="f_ubic_dir">Posizione <span class="cond">**</span></label><input data-cond-required="" id="f_ubic_dir" name="ubic_dir"/></div><div class="field full"><label for="f_dir_coord">Coordinate <span class="cond">**</span></label><div class="gps-row"><input id="f_dir_coord" name="dir_coord" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord="" data-cond-required=""/><button class="secondary no-print gps-btn" data-gps-for="f_dir_coord" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="f_dir_coord">Premi “Rileva” davanti al diramatore per inserire la posizione GPS, oppure scrivi le coordinate.</div></div><div class="field"><label for="f_io_dir">Ingresso / uscita utilizzata <span class="cond">**</span></label><input data-cond-required="" id="f_io_dir" name="io_dir"/></div><div class="field"><label for="f_note_dir">Note</label><input id="f_note_dir" name="note_dir"/></div></div>
 <div class="section-photo-area"><h3 class="photo-area-title">Fotografia diramatore</h3><div class="photo-grid"><div class="photo" id="box_dir"><h3>Diramatore <span class="cond">** se collegato</span></h3><small>Nome o codice chiaramente leggibile.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una foto già presente.</div><label class="camera-button no-print" for="foto_dir">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" id="foto_dir" name="foto_dir" type="file"/><img alt="Diramatore" class="preview"/></div></div></div></section>
 <section id="materialiSection"><h2><span class="num">6</span>Materiali installati e seriali</h2><p class="section-intro">Inserire tutti i materiali installati (es. ONT, borchia, modem). Per ognuno scattare la foto dell’etichetta: il codice a barre viene letto in automatico e il seriale compilato. Verificare sempre il valore letto.</p><div id="materials"></div><button class="secondary add-material no-print" onclick="addMaterial()" type="button">+ Aggiungi materiale</button></section>
 <section><h2><span class="num">7</span>Esito tecnico e firme</h2><div class="grid">
@@ -333,9 +423,23 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 </div></section>
 <section class="validation"><h2>Validazione obbligatoria</h2><p><b>Generando il PDF si dichiara che:</b></p><div class="choice"><label><input name="dichiarazione" required="" type="checkbox"/> I dati corrispondono all’attività svolta e le foto si riferiscono allo stesso Codice OLO / W.O.</label><label><input name="leggibili" required="" type="checkbox"/> Le fotografie sono nitide e gli identificativi sono leggibili.</label></div></section>
 </form>
+<div id="rreport" class="report" aria-hidden="true"></div>
+<div id="rxme" class="xme-overlay no-print" hidden role="dialog" aria-modal="true" aria-labelledby="rxmeTitle">
+<div class="xme-box">
+<h2 id="rxmeTitle">Testo per XME</h2>
+<p class="xme-help">Copia il testo e incollalo in XME. Il testo non è modificabile: per correggere un dato chiudi questa finestra e modifica il modulo.</p>
+<textarea id="rxmeText" readonly spellcheck="false" aria-label="Testo da copiare in XME"></textarea>
+<div class="xme-msg" id="rxmeMsg" aria-live="polite"></div>
+<div class="xme-actions">
+<button class="primary" id="rxmeCopy" type="button">📋 Copia testo</button>
+<button class="secondary" id="rxmePdf" type="button">🖨️ Genera PDF</button>
+<button class="secondary" id="rxmeClose" type="button">Chiudi</button>
+</div>
+</div>
+</div>
 <div class="bottom-actions no-print">
 <div class="status" id="status"></div>
-<button class="primary btn-main" onclick="generatePDF()" type="button">Genera PDF</button>
+<button class="primary btn-main" onclick="generatePDF()" type="button">Genera PDF e testo XME</button>
 <div class="btn-row"><button class="secondary" onclick="saveDraft()" type="button">Salva bozza</button><button class="secondary" onclick="loadDraft()" type="button">Carica bozza</button><button class="danger" onclick="resetForm()" type="button">Reset</button></div>
 </div>
 </div>
@@ -343,7 +447,6 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div id="app-sopralluogo" hidden>
 <div class="app">
 <a class="back-link no-print" href="#">‹ Torna alla scelta del modulo</a>
-
 <header><h1>Sopralluogo</h1><p>Scheda di sopralluogo tecnico con fotografie integrate</p><div class="legend"><span><b>*</b> Sempre obbligatorio</span><span><b>**</b> Obbligatorio quando applicabile</span></div></header>
 
 <form id="sf" novalidate autocomplete="off">
@@ -351,7 +454,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <section><h2><span class="num">1</span>Identificazione sopralluogo</h2>
 <div class="grid">
 <div class="field"><label for="s_wo">Codice OLO / W.O. / ID attività <span class="req">*</span></label><input id="s_wo" name="wo" autocapitalize="characters" data-text/><div class="err"></div></div>
-<div class="field"><label for="s_data">Data sopralluogo <span class="req">*</span></label><input id="s_data" name="data" type="date"/><div class="err"></div></div>
+<div class="field"><label for="s_data">Data intervento <span class="req">*</span></label><input id="s_data" name="data" type="date"/><div class="err"></div></div>
 <div class="field"><label for="s_squadra">Squadra / impresa <span class="req">*</span></label><input id="s_squadra" name="squadra" data-text data-min-letters="2"/><div class="err"></div></div>
 <div class="field"><label for="s_tecnico">Tecnico <span class="req">*</span></label><input id="s_tecnico" name="tecnico" data-text data-min-letters="2"/><div class="err"></div></div>
 <div class="field full"><label for="s_indirizzo">Indirizzo completo <span class="req">*</span></label><input id="s_indirizzo" name="indirizzo" data-text data-min-letters="3"/><div class="err"></div></div>
@@ -363,36 +466,29 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div id="q-civico-roe"></div>
 </section>
 
-<section><h2><span class="num">3</span>Opere civili</h2>
-<div id="q-opere"></div>
-</section>
-
-<section><h2><span class="num">4</span>Attrezzature e posa</h2>
-<div id="q-attrezzature"></div>
-</section>
-
-<section><h2><span class="num">5</span>Permessi e lavori a carico del cliente</h2>
-<div id="q-permessi"></div>
-</section>
-
-<section><h2><span class="num">6</span>Lavorazioni previste</h2>
-<div class="grid">
-<div class="field full"><label for="s_lav1">Descrizione lavorazione primaria <span class="req">*</span></label><textarea id="s_lav1" name="lav1" data-text data-min-chars="8"></textarea><div class="err"></div></div>
-<div class="field full"><label for="s_lav2">Descrizione lavorazione secondaria <span class="req">*</span></label><textarea id="s_lav2" name="lav2" data-text data-min-chars="8" data-none="lav2_none"></textarea><label class="check none"><input id="s_lav2_none" name="lav2_none" type="checkbox"/> Nessuna lavorazione secondaria</label><div class="err"></div></div>
-<div class="field full"><label for="s_altro">Altro</label><textarea id="s_altro" name="altro"></textarea></div>
-</div>
-</section>
-
-<section><h2><span class="num">7</span>Soluzioni individuate</h2>
-<p class="section-intro">Fotografare le soluzioni individuate durante il sopralluogo (percorso, punti di posa, criticità). Servono almeno 3 foto.</p>
-<div class="field" data-photo-field="soluzioni"></div>
-</section>
+<div class="solutions-intro"><h2 class="solutions-title">Soluzioni proposte</h2><p class="section-intro">Compilare almeno due soluzioni (principale e secondaria); se non esiste una soluzione secondaria, aprila e seleziona “Non è presente una soluzione secondaria”. Tocca il titolo di una soluzione per aprirla: i dati inseriti restano salvati anche passando dall’una all’altra.</p></div>
+<div id="solutions"></div>
+<button class="secondary add-material no-print" id="sbtnAddSol" type="button">+ Aggiungi soluzione</button>
 
 </form>
 
+<div id="sreport" class="report" aria-hidden="true"></div>
+<div id="sxme" class="xme-overlay no-print" hidden role="dialog" aria-modal="true" aria-labelledby="sxmeTitle">
+<div class="xme-box">
+<h2 id="sxmeTitle">Testo per XME</h2>
+<p class="xme-help">Copia il testo e incollalo in XME. Il testo non è modificabile: per correggere un dato chiudi questa finestra e modifica il modulo.</p>
+<textarea id="sxmeText" readonly spellcheck="false" aria-label="Testo da copiare in XME"></textarea>
+<div class="xme-msg" id="sxmeMsg" aria-live="polite"></div>
+<div class="xme-actions">
+<button class="primary" id="sxmeCopy" type="button">📋 Copia testo</button>
+<button class="secondary" id="sxmePdf" type="button">🖨️ Genera PDF</button>
+<button class="secondary" id="sxmeClose" type="button">Chiudi</button>
+</div>
+</div>
+</div>
 <div class="bottom-actions no-print">
 <div class="status" id="sstatus"></div>
-<button class="primary btn-main" id="sbtnPdf" type="button">Genera PDF</button>
+<button class="primary btn-main" id="sbtnPdf" type="button">Genera PDF e testo XME</button>
 <div class="btn-row"><button class="secondary" id="sbtnSave" type="button">Salva bozza</button><button class="secondary" id="sbtnLoad" type="button">Carica bozza</button><button class="danger" id="sbtnReset" type="button">Reset</button></div>
 </div>
 </div>
@@ -408,7 +504,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div class="grid">
 <div class="field"><label for="b_wo">Codice OLO / W.O. / ID attività <span class="req">*</span></label><input id="b_wo" name="wo" autocapitalize="characters" data-text/><div class="err"></div></div>
 <div class="field"><label for="b_risorsa">ID risorsa <span class="req">*</span></label><input id="b_risorsa" name="risorsa" autocapitalize="characters" data-text/><div class="err"></div></div>
-<div class="field"><label for="b_data">Data <span class="req">*</span></label><input id="b_data" name="data" type="date"/><div class="err"></div></div>
+<div class="field"><label for="b_data">Data intervento <span class="req">*</span></label><input id="b_data" name="data" type="date"/><div class="err"></div></div>
 <div class="field"><label for="b_squadra">Squadra / impresa <span class="req">*</span></label><input id="b_squadra" name="squadra" data-text data-min-letters="2"/><div class="err"></div></div>
 <div class="field"><label for="b_tecnico">Tecnico <span class="req">*</span></label><input id="b_tecnico" name="tecnico" data-text data-min-letters="2"/><div class="err"></div></div>
 <div class="field full"><label for="b_indirizzo">Indirizzo completo <span class="req">*</span></label><input id="b_indirizzo" name="indirizzo" data-text data-min-letters="3"/><div class="err"></div></div>
@@ -419,17 +515,17 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <section><h2><span class="num">2</span>Blocco tecnico</h2>
 
 <div class="qblock"><div class="field"><label for="b_causa">Causa del blocco <span class="req">*</span></label><select id="b_causa" name="causa" data-select><option value="">Seleziona</option><option>Mancanza continuità tra ROE e CNO</option><option>Mancanza continuità tra CNO e PCN</option><option>Fibra interrotta o danneggiata</option><option>Attenuazione fuori soglia</option><option>Fibra/porte esaurite</option><option>Altro</option></select><div class="err"></div></div>
-<div class="conditional hidden" data-show-if="causa=Altro"><div class="field"><label for="b_causa_altro">Descrivere la causa <span class="cond">**</span></label><textarea id="b_causa_altro" name="causa_altro" data-text data-min-chars="8"></textarea><div class="err"></div></div></div></div>
+<div class="conditional hidden" data-show-if="causa=*"><div class="field"><label for="b_problema">Descrivere il problema riscontrato <span class="cond">**</span></label><textarea id="b_problema" name="problema" data-text data-min-chars="10" placeholder="Es. fibre senza continuità tra ROE e CNO, prove effettuate, situazione riscontrata in campo…"></textarea><div class="err"></div></div></div></div>
 </section>
 
 <section><h2><span class="num">3</span>ROE e CNO di riferimento</h2>
 <div class="grid">
-<div class="field"><label for="b_roe">ROE di riferimento <span class="req">*</span></label><input id="b_roe" name="roe" autocapitalize="characters" placeholder="es. ROE 121" data-text data-need-digit/><div class="err"></div></div>
-<div class="field"><label for="b_cno">CNO di riferimento <span class="req">*</span></label><input id="b_cno" name="cno" autocapitalize="characters" placeholder="es. CNO2" data-text data-need-digit/><div class="err"></div></div>
+<div class="field"><label for="b_roe">Numero ROE <span class="req">*</span></label><input id="b_roe" name="roe" autocapitalize="characters" placeholder="es. ROE 121" data-text data-need-digit/><div class="err"></div></div>
+<div class="field"><label for="b_cno">Numero CNO <span class="req">*</span></label><input id="b_cno" name="cno" autocapitalize="characters" placeholder="es. CNO2" data-text data-need-digit/><div class="err"></div></div>
 </div>
-<div class="qblock" style="margin-top:16px"><div class="field" data-group="roe_diverso"><label>Il ROE è diverso da quello indicato nella pratica su XME? <span class="req">*</span></label><div class="choice"><label><input name="roe_diverso" type="radio" value="SI"/> Sì</label><label><input name="roe_diverso" type="radio" value="NO"/> No</label></div><div class="err"></div></div>
-<div class="conditional hidden" data-show-if="roe_diverso=SI"><div class="field"><label for="b_roe_xme">ROE indicato nella pratica XME <span class="cond">**</span></label><input id="b_roe_xme" name="roe_xme" autocapitalize="characters" placeholder="es. ROE 111" data-text data-need-digit/><div class="err"></div></div></div></div>
-<div class="qblock"><div class="field"><label for="b_coordinate">Coordinate del ROE <span class="req">*</span></label><div class="gps-row"><input id="b_coordinate" name="coordinate" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" id="bbtnGps" type="button">📍 Rileva</button></div><div class="gps-status no-print" id="bgpsStatus">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>
+<div class="qblock" style="margin-top:16px"><div class="field" data-group="roe_diverso"><label>Il ROE è diverso da quello indicato nella pratica XME? <span class="req">*</span></label><div class="choice"><label><input name="roe_diverso" type="radio" value="SI"/> Sì</label><label><input name="roe_diverso" type="radio" value="NO"/> No</label></div><div class="err"></div></div>
+<div class="conditional hidden" data-show-if="roe_diverso=SI"><div class="field"><label for="b_roe_xme">ROE da pratica XME <span class="cond">**</span></label><input id="b_roe_xme" name="roe_xme" autocapitalize="characters" placeholder="es. ROE 111" data-text data-need-digit/><div class="err"></div></div></div></div>
+<div class="qblock"><div class="field"><label for="b_coordinate">Coordinate ROE <span class="req">*</span></label><div class="gps-row"><input id="b_coordinate" name="coordinate" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" id="bbtnGps" type="button">📍 Rileva</button></div><div class="gps-status no-print" id="bgpsStatus">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>
 <div class="qblock"><p class="photo-area-title">Fotografie del ROE</p><div class="photo-grid">
 <div class="field" data-photo-field="roe_aperto"></div>
 <div class="field" data-photo-field="roe_chiuso"></div>
@@ -437,7 +533,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 </section>
 
 <section><h2><span class="num">4</span>Verifica fibre</h2>
-<p class="section-intro">Inserire tutte le fibre utilizzate per le prove, con la porta del patch panel e l’esito. Almeno una fibra è obbligatoria.</p>
+<p class="section-intro">Inserire tutte le fibre utilizzate per le prove, con la porta del permutatore (P.P.) e l’esito. Almeno una fibra è obbligatoria.</p>
 <div id="fibers"></div>
 <button class="secondary add-material no-print" id="bbtnAddFiber" type="button">+ Aggiungi fibra</button>
 </section>
@@ -456,9 +552,23 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 
 </form>
 
+<div id="breport" class="report" aria-hidden="true"></div>
+<div id="bxme" class="xme-overlay no-print" hidden role="dialog" aria-modal="true" aria-labelledby="bxmeTitle">
+<div class="xme-box">
+<h2 id="bxmeTitle">Testo per XME</h2>
+<p class="xme-help">Copia il testo e incollalo in XME. Il testo non è modificabile: per correggere un dato chiudi questa finestra e modifica il modulo.</p>
+<textarea id="bxmeText" class="xme-text" readonly spellcheck="false" aria-label="Testo da copiare in XME"></textarea>
+<div class="xme-msg" id="bxmeMsg" aria-live="polite"></div>
+<div class="xme-actions">
+<button class="primary" id="bxmeCopy" type="button">📋 Copia testo</button>
+<button class="secondary" id="bxmePdf" type="button">🖨️ Genera PDF</button>
+<button class="secondary" id="bxmeClose" type="button">Chiudi</button>
+</div>
+</div>
+</div>
 <div class="bottom-actions no-print">
 <div class="status" id="bstatus"></div>
-<button class="primary btn-main" id="bbtnPdf" type="button">Genera PDF</button>
+<button class="primary btn-main" id="bbtnPdf" type="button">Genera PDF e testo XME</button>
 <div class="btn-row"><button class="secondary" id="bbtnSave" type="button">Salva bozza</button><button class="secondary" id="bbtnLoad" type="button">Carica bozza</button><button class="danger" id="bbtnReset" type="button">Reset</button></div>
 </div>
 </div>
@@ -471,7 +581,7 @@ const form=document.getElementById('reportForm'), statusBox=document.getElementB
 function val(name){const e=form.elements[name]; if(!e)return ''; if(e instanceof RadioNodeList)return e.value; return e.value}
 function toggleByRadio(name,box){const on=val(name)==='si'; document.getElementById(box).classList.toggle('hidden',!on); document.querySelectorAll('#'+box+' [data-cond-required]').forEach(e=>e.required=on)}
 function toggleBySelect(id,box){const on=document.getElementById(id).value==='si'; document.getElementById(box).classList.toggle('hidden',!on); document.querySelectorAll('#'+box+' [data-cond-required]').forEach(e=>e.required=on)}
-form.addEventListener('change',()=>{toggleByRadio('scavo','scavoFields');toggleByRadio('cavo_usato','caviFields');toggleByRadio('diramatore','dirFields')});
+form.addEventListener('change',()=>{toggleByRadio('scavo','scavoFields');toggleByRadio('cavo_usato','caviFields');toggleByRadio('diramatore','dirFields');toggleByRadio('roe_xme_diverso','roeXmeFields')});
 
 /* Controllo qualità foto: scarta immagini nere, uniformi o senza dettagli (obiettivo coperto) */
 function analyzePhoto(image){
@@ -605,7 +715,79 @@ function validateAll(){statusBox.className='status';statusBox.textContent='';if(
  const mats=[...document.querySelectorAll('.material')];if(!mats.length){addMaterial();return error('Inserire almeno un materiale installato.',document.querySelector('.material input'))}
  for(const m of mats){const fi=m.querySelector('.photo-input');if(!fi.files.length)return error('Allegare la foto dell’etichetta per '+m.querySelector('.material-head strong').textContent.toLowerCase()+'.',fi)}
  const reqPhotos=[['foto_roe_aperto','la foto del ROE aperto'],['foto_roe_chiuso','la foto del ROE chiuso'],['foto_perm','la foto della porta del permutatore CNO'],['foto_split','la foto della porta dello splitter CNO'],['foto_id','la foto dell’ID risorsa installata al CNO']];if(val('scavo')==='si')reqPhotos.push(['foto_scavo','la foto dello scavo']);if(val('diramatore')==='si')reqPhotos.push(['foto_dir','la foto del diramatore']);for(const [n,label] of reqPhotos){if(!form.elements[n].files.length)return error('Allegare '+label+'.',form.elements[n])}return true}
-async function generatePDF(){if(!validateAll())return;statusBox.className='status ok';statusBox.textContent='Controllo completato. Le fotografie saranno inserite nel PDF. Nella finestra di stampa seleziona “Salva come PDF”.';const imgs=[...document.querySelectorAll('.preview')].filter(i=>i.src);await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):Promise.resolve()));const oldTitle=document.title;const olo=(val('wo')||'').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Rapporto attività squadra';const restore=()=>{document.title=oldTitle;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);setTimeout(()=>window.print(),250)}
+/* ---------- Riscontro: report (PDF) e testo XME ---------- */
+function rTxt(n){const e=form.elements[n];if(!e)return '';if(e instanceof RadioNodeList)return e.value;return String(e.value||'').trim()}
+const rEsc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const rYN=v=>({si:'Sì',no:'No',na:'Non applicabile'}[v]||v);
+function rPhoto(id,cap){const i=document.getElementById(id);const img=i&&i.closest('.photo')?.querySelector('.preview');return img&&img.getAttribute('src')?[{cap,src:img.src}]:[]}
+function rBuildReport(){
+ const fd=d=>d?d.split('-').reverse().join('/'):'';const R={alerts:[]};
+ R.hero={wo:rTxt('wo'),addr:rTxt('indirizzo')+', '+rTxt('comune'),data:fd(rTxt('data')),orario:rTxt('inizio')+' – '+rTxt('fine'),risorsa:rTxt('cliente'),tecnico:rTxt('tecnico'),squadra:rTxt('squadra'),cantiere:rTxt('cantiere')};
+ const sc=rTxt('scavo')==='si';R.opere=[{l:'Scavo eseguito',v:sc?'Sì – '+rTxt('metri_scavo').replace('.',',')+' m':'No'}];
+ if(sc){R.opere.push({l:'Superficie',v:rTxt('superficie'),lvl:1},{l:'Ripristino completato',v:rTxt('ripristino'),lvl:1});if(rTxt('note_scavo'))R.opere.push({l:'Note scavo',v:rTxt('note_scavo'),lvl:1})}
+ const cv=rTxt('cavo_usato')==='si';R.cavi=[{l:'Cavo utilizzato',v:cv?'Sì':'No'}];
+ if(cv){const cp=rTxt('cavo_principale');R.cavi.push({l:'Cavo principale',v:cp==='Non applicabile'?cp:cp+' – '+rTxt('cavo_principale_mt').replace('.',',')+' m',lvl:1},{l:'Monofibra',v:rTxt('tipo_monofibra')+' – '+rTxt('monofibra_mt').replace('.',',')+' m',lvl:1})}
+ const dv=rTxt('roe_xme_diverso')==='si';
+ R.roe=[{l:'Numero ROE',v:rTxt('roe_num')},{l:'ROE diverso da pratica XME',v:dv?'Sì':'No',alert:dv}];
+ if(dv){R.roe.push({l:'ROE da pratica XME',v:rTxt('roe_xme'),lvl:1,alert:true});R.alerts.push('ROE diverso da quello indicato in pratica XME (pratica: '+rTxt('roe_xme')+' – in campo: '+rTxt('roe_num')+')')}
+ R.roe.push({l:'Posizione ROE',v:rTxt('roe_pos')},{l:'Coordinate ROE',v:rTxt('roe_coord')},{l:'Colore fibra',v:rTxt('roe_fibra')},{l:'Porta ROE utilizzata',v:rTxt('roe_porta')},{l:'Stato ROE',v:rTxt('roe_stato')});
+ R.cno=[{l:'Numero CNO',v:rTxt('cno_num')},{l:'Porta permutatore (P.P.)',v:rTxt('cno_perm')},{l:'Nome / codice splitter',v:rTxt('cno_split')},{l:'Porta splitter',v:rTxt('cno_split_porta')},{l:'Etichette verificate',v:rTxt('etichette')}];
+ if(rTxt('note_rete'))R.cno.push({l:'Note',v:rTxt('note_rete')});
+ const dr=rTxt('diramatore');R.dir=[{l:'Collegamento a diramatore',v:rYN(dr)}];
+ if(dr==='si'){R.dir.push({l:'Nome / codice diramatore',v:rTxt('cod_dir'),lvl:1},{l:'Posizione diramatore',v:rTxt('ubic_dir'),lvl:1},{l:'Coordinate diramatore',v:rTxt('dir_coord'),lvl:1},{l:'Ingresso / uscita utilizzata',v:rTxt('io_dir'),lvl:1});if(rTxt('note_dir'))R.dir.push({l:'Note',v:rTxt('note_dir'),lvl:1})}
+ R.mat=[...document.querySelectorAll('.material')].map((m,i)=>({n:i+1,tipo:m.querySelector('[name^=mt_]').value.trim(),ser:m.querySelector('[name^=ms_]').value.trim(),src:m.querySelector('.preview')?.getAttribute('src')?m.querySelector('.preview').src:''}));
+ R.esito=[{l:'Attività completata',v:rTxt('completata')},{l:'Collaudo / verifica finale',v:rTxt('collaudo')}];
+ if(rTxt('anomalie'))R.esito.push({l:'Anomalie riscontrate',v:rTxt('anomalie'),long:true});
+ if(rTxt('azioni'))R.esito.push({l:'Azioni ancora necessarie',v:rTxt('azioni'),long:true});
+ R.esito.push({l:'Compilatore',v:rTxt('compilatore')},{l:'Caposquadra / responsabile',v:rTxt('caposquadra')},{l:'Data compilazione',v:fd(rTxt('data_comp'))});
+ R.foto=[{t:'Opere civili',p:sc?rPhoto('foto_scavo','Scavo'):[]},{t:'ROE',p:[...rPhoto('foto_roe_aperto','ROE aperto'),...rPhoto('foto_roe_chiuso','ROE chiuso')]},
+  {t:'CNO',p:[...rPhoto('foto_perm','Porta permutatore'),...rPhoto('foto_split','Porta splitter'),...rPhoto('foto_id','ID risorsa installata')]},
+  {t:'Diramatore',p:dr==='si'?rPhoto('foto_dir','Diramatore'):[]},{t:'Materiali installati',p:R.mat.filter(m=>m.src).map(m=>({cap:'Materiale '+m.n+' – '+m.tipo+' ('+m.ser+')',src:m.src}))}];
+ return R;
+}
+function rRenderReport(R){
+ const table=rows=>`<table class="rp-table">${rows.map(r=>`<tr class="lvl${r.lvl||0}${r.long?' long':''}${r.alert?' alert':''}"><th>${rEsc(r.l)}</th><td>${rEsc(r.v)}</td></tr>`).join('')}</table>`;
+ const sec=(n,t,body)=>`<div class="rp-sec"><h3 class="rp-title"><span>${n}</span>${rEsc(t)}</h3>${body}</div>`;
+ const pics=list=>`<div class="rp-photos">${list.map(p=>`<figure><img src="${p.src}" alt="${rEsc(p.cap)}"/><figcaption>${rEsc(p.cap)}</figcaption></figure>`).join('')}</div>`;
+ const mat=`<table class="rp-table rp-fibre"><thead><tr><th>#</th><th>Tipo materiale</th><th>Barcode / seriale</th></tr></thead><tbody>${R.mat.map(m=>`<tr><td>${m.n}</td><td>${rEsc(m.tipo)}</td><td>${rEsc(m.ser)}</td></tr>`).join('')}</tbody></table>`;
+ const H=R.hero;
+ document.getElementById('rreport').innerHTML=
+  `<div class="rp-hero"><h1>Riscontro attività – ${rEsc(H.wo)}</h1><p class="rp-addr">${rEsc(H.addr)}</p><p class="rp-meta"><span>Data <b>${rEsc(H.data)}</b></span><span>Orario <b>${rEsc(H.orario)}</b></span><span>ID risorsa <b>${rEsc(H.risorsa)}</b></span><span>Tecnico <b>${rEsc(H.tecnico)}</b></span><span>Squadra / impresa <b>${rEsc(H.squadra)}</b></span><span>Cantiere <b>${rEsc(H.cantiere)}</b></span></p></div>`+
+  (R.alerts.length?`<div class="rp-alert">⚠ ATTENZIONE${R.alerts.map(a=>`<div>• ${rEsc(a)}</div>`).join('')}</div>`:'')+
+  sec(1,'Opere civili',table(R.opere))+sec(2,'Cavi utilizzati',table(R.cavi))+sec(3,'ROE',table(R.roe))+sec(4,'CNO',table(R.cno))+
+  sec(5,'Diramatore',table(R.dir))+sec(6,'Materiali installati e seriali',mat)+sec(7,'Esito tecnico e firme',table(R.esito))+
+  `<div class="rp-sec rp-gallery"><h3 class="rp-title"><span>📷</span>Documentazione fotografica</h3>${R.foto.filter(g=>g.p.length).map(g=>`<div class="rp-group"><h4 class="rp-sub">Foto · ${rEsc(g.t)}</h4>${pics(g.p)}</div>`).join('')}</div>`;
+}
+function rReportText(R){
+ const L=[],H=R.hero,line=r=>L.push('  '.repeat(r.lvl||0)+r.l+': '+(r.v||'-'));
+ L.push('RISCONTRO ATTIVITÀ – '+H.wo+' – '+H.data+' ('+H.orario+')');
+ L.push('ID risorsa: '+H.risorsa+' – Cantiere: '+H.cantiere);
+ L.push('Squadra: '+H.squadra+' – Tecnico: '+H.tecnico);
+ L.push('Indirizzo: '+H.addr);
+ const block=(t,rows)=>{L.push('');L.push(t);rows.forEach(line)};
+ block('OPERE CIVILI',R.opere);block('CAVI UTILIZZATI',R.cavi);block('ROE',R.roe);block('CNO',R.cno);block('DIRAMATORE',R.dir);
+ L.push('');L.push('MATERIALI INSTALLATI E SERIALI');R.mat.forEach(m=>L.push('Materiale '+m.n+': '+m.tipo+' – '+m.ser));
+ block('ESITO TECNICO E FIRME',R.esito);
+ return L.join('\n');
+}
+const rXme=document.getElementById('rxme'),rXmeText=document.getElementById('rxmeText'),rXmeMsg=document.getElementById('rxmeMsg');
+function rOpenXme(t){rXmeText.value=t;rXmeMsg.textContent='';rXme.hidden=false;document.body.classList.add('modal-open');setTimeout(()=>document.getElementById('rxmeCopy').focus(),50)}
+function rCloseXme(){rXme.hidden=true;document.body.classList.remove('modal-open')}
+document.getElementById('rxmeClose').addEventListener('click',rCloseXme);
+rXme.addEventListener('click',e=>{if(e.target===rXme)rCloseXme()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!rXme.hidden)rCloseXme()});
+rXmeText.addEventListener('focus',()=>rXmeText.select());
+document.getElementById('rxmeCopy').addEventListener('click',async()=>{
+ let ok=false;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(rXmeText.value);ok=true}}catch(e){}
+ if(!ok){try{rXmeText.focus();rXmeText.select();rXmeText.setSelectionRange(0,rXmeText.value.length);ok=document.execCommand('copy')}catch(e){}}
+ rXmeMsg.className='xme-msg '+(ok?'ok':'err');rXmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
+});
+async function rPrintReport(){
+ const imgs=[...document.querySelectorAll('#rreport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):Promise.resolve()));
+ const oldTitle=document.title;const olo=(val('wo')||'').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Rapporto attività squadra';
+ const restore=()=>{document.title=oldTitle;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);setTimeout(()=>window.print(),200)}
+document.getElementById('rxmePdf').addEventListener('click',()=>{rCloseXme();rPrintReport()});
+function generatePDF(){if(!validateAll())return;const R=rBuildReport();rRenderReport(R);statusBox.className='status ok';statusBox.textContent='Controllo completato. Copia il testo per XME e genera il PDF dalla finestra che si è aperta.';rOpenXme(rReportText(R))}
 function saveDraft(){const data={};new FormData(form).forEach((v,k)=>{if(!(v instanceof File))data[k]=v});form.querySelectorAll('input[type=checkbox]').forEach(e=>data[e.name]=e.checked);data._materials=[...document.querySelectorAll('.material')].map(m=>+m.dataset.id);try{localStorage.setItem('rapportoSquadra',JSON.stringify(data))}catch(err){return error('Impossibile salvare la bozza su questo dispositivo (memoria del browser non disponibile o piena).')}statusBox.className='status ok';statusBox.textContent='Bozza salvata su questo dispositivo. Le fotografie, per sicurezza, devono essere ricaricate.'}
 function loadDraft(){let raw=null;try{raw=localStorage.getItem('rapportoSquadra')}catch(err){}if(!raw)return error('Nessuna bozza salvata su questo dispositivo.');let data;try{data=JSON.parse(raw)}catch(err){return error('La bozza salvata non è leggibile. Compilare nuovamente il modulo.')}if(Array.isArray(data._materials)&&data._materials.length){materialsBox.innerHTML='';mc=0;data._materials.forEach(id=>addMaterial(id))}
 Object.entries(data).forEach(([k,v])=>{if(k==='_materials')return;const e=form.elements[k];if(!e)return;if(e instanceof RadioNodeList){[...e].forEach(x=>x.checked=x.value===v)}else if(e.type==='checkbox')e.checked=!!v;else e.value=v});form.dispatchEvent(new Event('change'));statusBox.className='status ok';statusBox.textContent='Bozza caricata. Ricaricare le fotografie prima di generare il PDF.'}
@@ -615,71 +797,104 @@ addMaterial();syncCavo();
 window.addEventListener('load',()=>{form.elements.data_comp.value=todayLocal();form.dispatchEvent(new Event('change'))});
 </script>
 
-<script>
-(function(){
-const root=document.getElementById('app-sopralluogo');const form=document.getElementById('sf'), statusBox=document.getElementById('sstatus');
-const DRAFT_KEY='sopralluogoWFM';
+<script>(function(){
+const root=document.getElementById('app-sopralluogo'),form=document.getElementById('sf'),statusBox=document.getElementById('sstatus');
+const DRAFT_KEY='sopralluogoWFM_v2';
+const solBox=document.getElementById('solutions');
 
-/* ---------- Domande SI/NO ----------
-   trigger: risposta che apre il campo note obbligatorio
-   photoMin: numero minimo di foto obbligatorie quando la risposta è il trigger */
-const QUESTIONS={
- 'q-civico-roe':[
-  {name:'civico',label:'Il civico è corretto?',trigger:'NO',note:'Indicare il civico corretto e le informazioni aggiuntive'},
-  {extra:'coordinate'},
-  {name:'roe',label:'Il ROE è corretto?',trigger:'NO',note:'Indicare il ROE corretto e le informazioni aggiuntive'},
-  {extra:'ui'}
- ],
- 'q-opere':[
-  {name:'scavo',label:'È previsto uno scavo?',trigger:'SI',note:'Dettagli dello scavo (tratta, metri stimati, tipo di superficie…)',photoMin:1,photoLabel:'Foto area di scavo'},
-  {extra:'ente'},
-  {name:'pavimentazione',label:'La pavimentazione è pregiata?',trigger:'SI',note:'Dettagli della pavimentazione pregiata',photoMin:1,photoLabel:'Foto pavimentazione pregiata'},
-  {name:'iru',label:'È previsto l’utilizzo di tratte IRU?',trigger:'SI',note:'Dettagli delle tratte IRU'}
- ],
- 'q-attrezzature':[
-  {name:'cestello',label:'È necessario il cestello?',trigger:'SI',note:'Dettagli sull’utilizzo del cestello',photoMin:1,photoLabel:'Foto punto di lavoro con cestello'},
-  {name:'scala',label:'È necessaria la scala alta?',trigger:'SI',note:'Dettagli sull’utilizzo della scala alta'},
-  {name:'multifibra',label:'È necessario posare il Multifibra?',trigger:'SI',note:'Dettagli sulla posa del Multifibra'},
-  {name:'microcavo',label:'È necessario posare il Microcavo + PTE?',trigger:'SI',note:'Dettagli sulla posa del Microcavo + PTE'}
- ],
- 'q-permessi':[
-  {name:'vicini',label:'È necessario il permesso dei vicini?',trigger:'SI',note:'Dettagli sul permesso dei vicini'},
-  {name:'cliente',label:'Sono necessari lavori a carico del cliente?',trigger:'SI',note:'Dettagli sui lavori a carico del cliente',photoMin:1,photoLabel:'Foto lavori a carico del cliente'}
- ]
-};
-const EXTRA={
- coordinate:`<div class="qblock"><div class="field"><label for="s_coordinate">Coordinate civico <span class="req">*</span></label><div class="gps-row"><input id="s_coordinate" name="coordinate" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" id="btnGps" type="button">📍 Rileva</button></div><div class="gps-status no-print" id="gpsStatus">Premi “Rileva” davanti al civico per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>`,
- ui:`<div class="qblock"><div class="field"><label for="s_ui">Numero di unità immobiliari (UI) <span class="req">*</span></label><input id="s_ui" name="ui" type="number" inputmode="numeric" min="1" step="1" data-int/><div class="err"></div></div></div>`,
- ente:`<div class="qblock"><div class="field" data-group="ente"><label>Ente competente della strada <span class="req">*</span> <span class="cond">(anche più di uno)</span></label><div class="choice multi"><label><input name="ente" type="checkbox" value="Comune"/> Comune</label><label><input name="ente" type="checkbox" value="Provincia"/> Provincia</label><label><input name="ente" type="checkbox" value="ANAS"/> ANAS</label></div><div class="err"></div></div></div>`
-};
-function qHtml(q){
- if(q.extra) return EXTRA[q.extra];
- const opt=v=>`<label><input name="${q.name}" type="radio" value="${v}"/> ${v==='SI'?'Sì':'No'}</label>`;
- let cond=`<div class="field"><label for="s_${q.name}_note">${q.note} <span class="cond">**</span></label><textarea id="s_${q.name}_note" name="${q.name}_note" data-text data-min-chars="5" data-cond-of="${q.name}"></textarea><div class="err"></div></div>`;
- if(q.photoMin) cond+=`<div class="field" data-photo-field="${q.name}_foto" data-photo-of="${q.name}"></div>`;
- return `<div class="qblock"><div class="field" data-group="${q.name}"><label>${q.label} <span class="req">*</span></label><div class="choice">${opt('SI')}${opt('NO')}</div><div class="err"></div></div><div class="conditional hidden" data-show-if="${q.name}=${q.trigger}">${cond}</div></div>`;
+/* ---------- Domande ---------- */
+const CIVICO=[
+ {name:'civico_xme',short:'Civico diverso da pratica XME',alert:'Civico diverso da quello indicato in pratica XME',alertOn:'SI',label:'Il civico è diverso da quello indicato nella pratica XME?',trigger:'SI',note:'Civico rilevato in campo',minChars:1},
+ {extra:'coordinate'},
+ {name:'roe_xme',short:'ROE diverso da pratica XME',alert:'ROE diverso da quello indicato in pratica XME',alertOn:'SI',label:'Il ROE è diverso da quello indicato nella pratica XME?',trigger:'SI',note:'ROE rilevato in campo',minChars:1},
+ {extra:'coordinate_roe'},
+ {extra:'ui'}
+];
+const SOL_SECTIONS=[
+ {num:3,title:'Opere civili',q:[
+  {name:'scavo',short:'Scavo previsto',label:'È previsto uno scavo?',trigger:'SI',note:'Inserire i metri di scavo necessari',num:true,photoMin:1,photoLabel:'Foto area di scavo',nested:[
+    {extra:'ente'},
+    {name:'pavimentazione',short:'Pavimentazione pregiata',label:'La pavimentazione è pregiata?',trigger:'SI',note:'Dettagli della pavimentazione pregiata',photoMin:1,photoLabel:'Foto pavimentazione pregiata'}]},
+  {name:'iru',short:'Tratte IRU',label:'È previsto l’utilizzo di tratte IRU?',trigger:'SI',notes:[
+    {key:'ente',short:'Ente competenza IRU',label:'Indicare ente competenza tratta IRU (ED, TIM, IP, ecc.)',minChars:2},
+    {key:'tipo',short:'Tipo tratta IRU',label:'Indicare se tratta IRU è aerea e/o interrata',minChars:5}]}]},
+ {num:4,title:'Attrezzature e posa',q:[
+  {name:'cestello',short:'Cestello',label:'È necessario il cestello?',trigger:'SI',note:'Dettagli sull’utilizzo del cestello',photoMin:1,photoLabel:'Foto punto di lavoro con cestello'},
+  {name:'scala',short:'Scala alta',label:'È necessaria la scala alta?',trigger:'SI',note:'Dettagli sull’utilizzo della scala alta'},
+  {name:'multifibra',short:'Multifibra',label:'È necessario posare il Multifibra?',trigger:'SI',note:'Indicare i metri di cavo necessari',num:true},
+  {name:'microcavo',short:'Microcavo + PTE',label:'È necessario posare il Microcavo + PTE?',trigger:'SI',note:'Indicare i metri di cavo necessari',num:true}]},
+ {num:5,title:'Permessi e lavori a carico del cliente',q:[
+  {name:'vicini',short:'Permesso vicini',label:'È necessario il permesso dei vicini?',trigger:'SI',note:'Dettagli sul permesso dei vicini'},
+  {name:'cliente',short:'Lavori a carico del cliente',label:'Sono necessari lavori a carico del cliente?',trigger:'SI',note:'Dettagli sui lavori a carico del cliente',photoMin:1,photoLabel:'Foto lavori a carico del cliente'}]}
+];
+const PHOTO_CFG={};
+function extraHtml(x,suf){
+ if(x==='coordinate')return `<div class="qblock"><div class="field"><label for="s_coordinate">Coordinate civico <span class="req">*</span></label><div class="gps-row"><input id="s_coordinate" name="coordinate" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" data-gps-for="s_coordinate" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="s_coordinate">Premi “Rileva” davanti al civico per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>`;
+ if(x==='coordinate_roe')return `<div class="qblock"><div class="field"><label for="s_coordinate_roe">Coordinate ROE <span class="req">*</span></label><div class="gps-row"><input id="s_coordinate_roe" name="coordinate_roe" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" data-gps-for="s_coordinate_roe" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="s_coordinate_roe">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>`;
+ if(x==='ui')return `<div class="qblock"><div class="field"><label for="s_ui">Numero di unità immobiliari (UI) <span class="req">*</span></label><input id="s_ui" name="ui" type="number" inputmode="numeric" min="1" step="1" data-int/><div class="err"></div></div></div>`;
+ if(x==='ente')return `<div class="qblock"><div class="field" data-group="ente${suf}"><label>Ente competente della strada <span class="req">*</span> <span class="cond">(anche più di uno)</span></label><div class="choice multi"><label><input name="ente${suf}" type="checkbox" value="Comune"/> Comune</label><label><input name="ente${suf}" type="checkbox" value="Provincia"/> Provincia</label><label><input name="ente${suf}" type="checkbox" value="ANAS"/> ANAS</label><label><input name="ente${suf}" type="checkbox" value="Strada privata"/> Strada privata</label></div><div class="err"></div></div></div>`;
 }
-Object.entries(QUESTIONS).forEach(([id,list])=>{document.getElementById(id).innerHTML=list.map(qHtml).join('')});
+function qHtml(q,suf=''){
+ if(q.extra)return extraHtml(q.extra,suf);
+ const n=q.name+suf;
+ const opt=v=>`<label><input name="${n}" type="radio" value="${v}"/> ${v==='SI'?'Sì':'No'}</label>`;
+ let cond='';
+ if(q.notes)cond=q.notes.map(o=>`<div class="field"><label for="s_${n}_${o.key}">${o.label} <span class="cond">**</span></label><textarea id="s_${n}_${o.key}" name="${n}_${o.key}" data-text data-min-chars="${o.minChars}"></textarea><div class="err"></div></div>`).join('');
+ else if(q.num)cond=`<div class="field"><label for="s_${n}_note">${q.note} <span class="cond">**</span></label><input id="s_${n}_note" name="${n}_note" inputmode="decimal" placeholder="metri, es. 12,5" data-num/><div class="err"></div></div>`;
+ else if(q.minChars===1)cond=`<div class="field"><label for="s_${n}_note">${q.note} <span class="cond">**</span></label><input id="s_${n}_note" name="${n}_note" autocapitalize="characters" data-text/><div class="err"></div></div>`;
+ else cond=`<div class="field"><label for="s_${n}_note">${q.note} <span class="cond">**</span></label><textarea id="s_${n}_note" name="${n}_note" data-text data-min-chars="5"></textarea><div class="err"></div></div>`;
+ if(q.photoMin){const k=q.name+'_foto'+suf;PHOTO_CFG[k]={min:q.photoMin,label:q.photoLabel,hint:'Foto obbligatoria (almeno '+q.photoMin+').',cond:true};cond+=`<div class="field" data-photo-field="${k}"></div>`}
+ if(q.nested)cond+=`<div class="nested-q">${q.nested.map(x=>qHtml(x,suf)).join('')}</div>`;
+ return `<div class="qblock"><div class="field" data-group="${n}"><label>${q.label} <span class="req">*</span></label><div class="choice">${opt('SI')}${opt('NO')}</div><div class="err"></div></div><div class="conditional hidden" data-show-if="${n}=${q.trigger}">${cond}</div></div>`;
+}
+document.getElementById('q-civico-roe').innerHTML=CIVICO.map(q=>qHtml(q)).join('');
+
+/* ---------- Soluzioni ---------- */
+let sc=0;
+const ORD=['Terza','Quarta','Quinta','Sesta','Settima','Ottava','Nona','Decima'];
+function solTitle(i){return i===0?'Soluzione principale':i===1?'Soluzione secondaria':(ORD[i-2]?ORD[i-2]+' soluzione':'Soluzione '+(i+1))}
+function addSolution(id,open){
+ if(id)sc=Math.max(sc,id);else id=++sc;const suf='__'+id;
+ const kf='sol_foto'+suf;PHOTO_CFG[kf]={min:3,label:'Foto della soluzione',hint:'Almeno 3 foto della soluzione (percorso, punti di posa, criticità). Tocca il pulsante per ogni foto da aggiungere.'};
+ const secs=SOL_SECTIONS.map(s=>`<section><h2><span class="num">${s.num}</span>${s.title}</h2>${s.q.map(q=>qHtml(q,suf)).join('')}</section>`).join('')+
+ `<section><h2><span class="num">6</span>Descrizione e foto della soluzione</h2><div class="grid">
+ <div class="field full"><label for="s_desc${suf}">Descrizione della soluzione <span class="req">*</span></label><textarea id="s_desc${suf}" name="desc${suf}" data-text data-min-chars="10"></textarea><div class="err"></div></div>
+ <div class="field full"><label for="s_altro${suf}">Altro</label><textarea id="s_altro${suf}" name="altro${suf}"></textarea></div>
+ <div class="field full" data-photo-field="${kf}"></div></div></section>`;
+ const d=document.createElement('div');d.className='solution';d.dataset.sol=id;
+ d.innerHTML=`<button type="button" class="sol-head" aria-expanded="false"><span class="sol-title"></span><span class="sol-state">Da compilare</span><span class="sol-chev" aria-hidden="true">▾</span></button>
+ <div class="sol-body"><label class="sol-none"><input type="checkbox" name="nosec${suf}"/> Non è presente una soluzione secondaria</label><div class="sol-content">${secs}</div><button type="button" class="danger sol-remove no-print">Rimuovi questa soluzione</button></div>`;
+ solBox.appendChild(d);
+ d.querySelectorAll('[data-photo-field]').forEach(initPhotoField);
+ d.querySelector('.sol-head').addEventListener('click',()=>openSolution(d,!d.classList.contains('open')));
+ d.querySelector('.sol-remove').addEventListener('click',()=>{if(solBox.children.length<=2)return;if(!confirm('Rimuovere questa soluzione e tutti i suoi dati?'))return;
+  d.querySelectorAll('[data-photo-field]').forEach(f=>{delete photos[f.dataset.photoField];delete PHOTO_CFG[f.dataset.photoField]});d.remove();renumberSolutions()});
+ renumberSolutions();sync();if(open)openSolution(d,true);return d;
+}
+function renumberSolutions(){[...solBox.children].forEach((d,i)=>{d.querySelector('.sol-title').textContent=solTitle(i);d.querySelector('.sol-remove').hidden=i<2;const nb=d.querySelector('.sol-none');nb.hidden=i!==1;if(i!==1)nb.querySelector('input').checked=false;syncNone(d)});updateStates()}
+function syncNone(d){const on=d.querySelector('.sol-none input').checked;d.querySelector('.sol-content').classList.toggle('hidden',on);d.classList.toggle('none',on)}
+function openSolution(d,on){[...solBox.children].forEach(x=>{const o=on&&x===d;x.classList.toggle('open',o);x.querySelector('.sol-head').setAttribute('aria-expanded',o)});
+ if(on)setTimeout(()=>d.scrollIntoView({behavior:'smooth',block:'start'}),50)}
+function updateStates(){[...solBox.children].forEach(d=>{syncNone(d);const none=d.classList.contains('none');const ok=validate(d,false).length===0;const st=d.querySelector('.sol-state');st.textContent=none?'Non presente':ok?'Completa':'Da compilare';d.classList.toggle('done',ok&&!none)})}
+document.getElementById('sbtnAddSol').addEventListener('click',()=>addSolution(0,true));
 
 /* ---------- Foto multiple ---------- */
-const PHOTO_CFG={soluzioni:{min:3,label:'Foto soluzioni individuate',hint:'Almeno 3 foto. Tocca il pulsante per ogni foto da aggiungere.'}};
-Object.values(QUESTIONS).flat().forEach(q=>{if(q.photoMin)PHOTO_CFG[q.name+'_foto']={min:q.photoMin,label:q.photoLabel,hint:'Foto obbligatoria (almeno '+q.photoMin+').'}});
 const photos={};
-root.querySelectorAll('[data-photo-field]').forEach(f=>{
- const k=f.dataset.photoField,c=PHOTO_CFG[k];photos[k]=[];
- f.innerHTML=`<div class="mphoto"><h3>${c.label} <span class="${f.dataset.photoOf?'cond':'req'}">${f.dataset.photoOf?'**':'*'}</span></h3><small>${c.hint}</small>
+function initPhotoField(f){
+ const k=f.dataset.photoField,c=PHOTO_CFG[k];photos[k]=photos[k]||[];
+ f.innerHTML=`<div class="mphoto"><h3>${c.label} <span class="${c.cond?'cond':'req'}">${c.cond?'**':'*'}</span></h3><small>${c.hint}</small>
  <label class="camera-button no-print" for="ph_${k}">📷 Scatta o aggiungi foto</label>
  <input accept="image/*" class="visually-hidden-input" id="ph_${k}" type="file" aria-label="${c.label}"/>
  <div class="thumbs"></div><div class="counter"></div><div class="msg no-print"></div><div class="err own"></div></div>`;
  f.querySelector('input').addEventListener('change',e=>addPhotos(k,[...e.target.files],e.target));
  renderPhotos(k);
-});
+}
 function renderPhotos(k){
- const f=root.querySelector(`[data-photo-field="${k}"]`),box=f.querySelector('.mphoto'),c=PHOTO_CFG[k],list=photos[k];
+ const f=root.querySelector(`[data-photo-field="${k}"]`);if(!f)return;const box=f.querySelector('.mphoto'),c=PHOTO_CFG[k],list=photos[k];
  const th=f.querySelector('.thumbs');th.innerHTML='';
  list.forEach((p,i)=>{const fig=document.createElement('figure');fig.className='thumb';
   fig.innerHTML=`<img alt="${c.label} ${i+1}" src="${p.src}"/><figcaption>Foto ${i+1}</figcaption><button type="button">Rimuovi</button>`;
-  fig.querySelector('button').addEventListener('click',()=>{if(!confirm('Rimuovere questa foto?'))return;list.splice(i,1);renderPhotos(k)});th.appendChild(fig)});
+  fig.querySelector('button').addEventListener('click',()=>{if(!confirm('Rimuovere questa foto?'))return;list.splice(i,1);renderPhotos(k);updateStates()});th.appendChild(fig)});
  box.classList.toggle('ok',list.length>=c.min);
  f.querySelector('.counter').textContent=list.length+(list.length===1?' foto caricata':' foto caricate')+(list.length<c.min?' (minimo '+c.min+')':'');
  if(list.length>=c.min)f.classList.remove('invalid');
@@ -709,28 +924,24 @@ async function addPhotos(k,files,input){
    try{const M=1600,s=Math.min(1,M/Math.max(r.img.naturalWidth,r.img.naturalHeight));if(s<1||file.size>800000){const cv=document.createElement('canvas');cv.width=Math.round(r.img.naturalWidth*s);cv.height=Math.round(r.img.naturalHeight*s);cv.getContext('2d').drawImage(r.img,0,0,cv.width,cv.height);src=cv.toDataURL('image/jpeg',0.85)}}catch(e){}}
   photos[k].push({src,name:file.name});
  }
- input.value='';renderPhotos(k);
+ input.value='';renderPhotos(k);updateStates();
 }
 
 /* ---------- Campi condizionati ---------- */
-function val(n){const e=form.elements[n];if(!e)return '';if(e instanceof RadioNodeList)return e.value;return e.value}
-function sync(){
- root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');c.classList.toggle('hidden',val(n)!==v)});
- root.querySelectorAll('[data-none]').forEach(t=>{const cb=form.elements[t.dataset.none];t.disabled=cb.checked;if(cb.checked)t.value=''});
-}
-form.addEventListener('change',sync);
-form.addEventListener('input',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
+function val(n){const e=form.elements[n];if(!e)return '';return e.value}
+function sync(){root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');c.classList.toggle('hidden',val(n)!==v)})}
+form.addEventListener('change',e=>{if(e.target.closest('.sol-none')){const d=e.target.closest('.solution');syncNone(d);if(e.target.checked)d.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));statusBox.className='status';statusBox.textContent=''}sync();updateStates()});
+let stT;form.addEventListener('input',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'');clearTimeout(stT);stT=setTimeout(updateStates,300)});
 
 /* ---------- GPS ---------- */
-document.getElementById('btnGps').addEventListener('click',()=>{
- const st=document.getElementById('gpsStatus'),inp=form.elements.coordinate;
+root.querySelectorAll('[data-gps-for]').forEach(btn=>btn.addEventListener('click',()=>{
+ const id=btn.dataset.gpsFor,inp=document.getElementById(id),st=root.querySelector('[data-gps-status="'+id+'"]');
  if(!navigator.geolocation){st.textContent='Il dispositivo non supporta la geolocalizzazione: inserire le coordinate a mano.';return}
  st.textContent='Rilevamento posizione in corso…';
- navigator.geolocation.getCurrentPosition(p=>{inp.value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6);setErr(inp.closest('.field'),'');
+ navigator.geolocation.getCurrentPosition(p=>{inp.value=p.coords.latitude.toFixed(6)+', '+p.coords.longitude.toFixed(6);setErr(inp.closest('.field'),'');updateStates();
    st.textContent='Posizione rilevata (precisione circa '+Math.round(p.coords.accuracy)+' m).'+(p.coords.accuracy>50?' Precisione bassa: se possibile riprova all’aperto.':'')},
   err=>{st.textContent=err.code===1?'Accesso alla posizione negato: consentilo nelle impostazioni del browser oppure inserisci le coordinate a mano.':'Posizione non disponibile: riprova o inserisci le coordinate a mano.'},
-  {enableHighAccuracy:true,timeout:20000,maximumAge:0});
-});
+  {enableHighAccuracy:true,timeout:20000,maximumAge:0})}));
 
 /* ---------- Validazione ---------- */
 const BLACKLIST=['nd','na','nn','nc','no','si','sì','x','xx','xxx','nessuno','nessuna','niente','boh','nonso','sconosciuto','ignoto','vuoto','null','nullo','test','prova','nondisponibile','nonpresente','mancante','asd','aaa','zzz','ok'];
@@ -746,8 +957,8 @@ function junkReason(el){
  return '';
 }
 function coordReason(v){
- const m=(v||'').trim().replace(/\s+/g,' ').match(/^(-?\d{1,2}[.,]\d+)\s*[,; ]\s*(-?\d{1,3}[.,]\d+)$/);
  if(!(v||'').trim())return 'Campo obbligatorio: premere “Rileva” o inserire le coordinate.';
+ const m=v.trim().replace(/\s+/g,' ').match(/^(-?\d{1,2}[.,]\d+)\s*[,; ]\s*(-?\d{1,3}[.,]\d+)$/);
  if(!m)return 'Formato non valido: usare latitudine, longitudine (es. 46.170123, 9.871234).';
  const lat=parseFloat(m[1].replace(',','.')),lon=parseFloat(m[2].replace(',','.'));
  if(lat<35||lat>47.5||lon<6||lon>19)return 'Coordinate fuori dall’Italia: verificare (forse latitudine e longitudine sono invertite).';
@@ -756,62 +967,136 @@ function coordReason(v){
 }
 function setErr(f,msg){if(!f)return;f.classList.toggle('invalid',!!msg);const e=f.querySelector('.err');if(e)e.textContent=msg||''}
 function visible(el){return !el.closest('.hidden')}
-function validate(){
- root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));
- const bad=[];const fail=(f,m)=>{setErr(f,m);bad.push(f)};
- // ordine di pagina
- const fields=[...form.querySelectorAll('.field')];
- for(const f of fields){
+function validate(scope,mark=true){
+ if(mark)scope.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));
+ const bad=[];const fail=(f,m)=>{if(mark)setErr(f,m);bad.push(f)};
+ for(const f of scope.querySelectorAll('.field')){
   if(!visible(f))continue;
   const grp=f.dataset.group;
   if(grp){const els=[...form.querySelectorAll(`[name="${grp}"]`)];if(!els.some(e=>e.checked))fail(f,els[0].type==='checkbox'?'Selezionare almeno una voce.':'Selezionare una risposta.');continue}
-  if(f.dataset.photoField){const k=f.dataset.photoField,c=PHOTO_CFG[k];if(photos[k].length<c.min)fail(f,photos[k].length?'Servono almeno '+c.min+' foto (caricate: '+photos[k].length+').':'Foto obbligatoria'+(c.min>1?': servono almeno '+c.min+' foto.':'.'));continue}
+  if(f.dataset.photoField){const k=f.dataset.photoField,c=PHOTO_CFG[k];if((photos[k]||[]).length<c.min)fail(f,(photos[k]||[]).length?'Servono almeno '+c.min+' foto (caricate: '+photos[k].length+').':'Foto obbligatoria'+(c.min>1?': servono almeno '+c.min+' foto.':'.'));continue}
   const el=f.querySelector('input:not([type=checkbox]):not([type=radio]),textarea');if(!el)continue;
   if(el.hasAttribute('data-coord')){const r=coordReason(el.value);if(r)fail(f,r);continue}
+  if(el.hasAttribute('data-num')){const v=el.value.trim().replace(',','.');if(!v)fail(f,'Campo obbligatorio: indicare i metri.');else if(!/^\d+(\.\d+)?$/.test(v)||+v<=0)fail(f,'Inserire un numero di metri maggiore di zero.');continue}
   if(el.hasAttribute('data-int')){const v=el.value.trim();if(!v)fail(f,'Campo obbligatorio.');else if(!/^\d+$/.test(v)||+v<1)fail(f,'Inserire un numero intero maggiore di zero.');continue}
   if(el.type==='date'){if(!el.value)fail(f,'Campo obbligatorio.');continue}
-  if(el.hasAttribute('data-text')){if(el.disabled)continue;const r=junkReason(el);if(r)fail(f,r)}
+  if(el.hasAttribute('data-text')){const r=junkReason(el);if(r)fail(f,r)}
  }
  return bad;
 }
 function showStatus(type,msg){statusBox.className='status '+type;statusBox.textContent=msg}
 
 /* ---------- PDF ---------- */
-document.getElementById('sbtnPdf').addEventListener('click',async()=>{
- const bad=validate();
- if(bad.length){showStatus('err',(bad.length===1?'C’è 1 campo da correggere':'Ci sono '+bad.length+' campi da correggere')+' prima di generare il PDF.');
-  const el=bad[0].querySelector('input:not([type=file]),textarea');try{el&&el.focus({preventScroll:true})}catch(e){}
-  bad[0].scrollIntoView({behavior:'smooth',block:'center'});return}
- showStatus('ok','Controllo completato. Nella finestra di stampa seleziona “Salva come PDF”.');
- const imgs=[...root.querySelectorAll('.thumb img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
+/* ---------- Report (PDF) e testo XME ---------- */
+const yn=v=>v==='SI'?'Sì':v==='NO'?'No':v;
+function txt(n){const e=form.elements[n];return e?String(e.value||'').trim():''}
+function qRows(q,suf,out,lvl){
+ if(q.extra){
+  if(q.extra==='coordinate')out.rows.push({l:'Coordinate civico',v:txt('coordinate'),lvl});
+  else if(q.extra==='coordinate_roe')out.rows.push({l:'Coordinate ROE',v:txt('coordinate_roe'),lvl});
+  else if(q.extra==='ui')out.rows.push({l:'Unità immobiliari (UI)',v:txt('ui'),lvl});
+  else if(q.extra==='ente')out.rows.push({l:'Ente competente della strada',v:[...form.querySelectorAll('[name="ente'+suf+'"]:checked')].map(e=>e.value).join(', '),lvl});
+  return}
+ const n=q.name+suf,v=val(n),on=v===q.trigger;let disp=yn(v);
+ if(on&&q.num)disp+=' – '+txt(n+'_note').replace('.',',')+' m';
+ else if(on&&!q.notes&&q.minChars!==1)disp+=' – '+txt(n+'_note');
+ const al=!!(q.alert&&v===(q.alertOn||'NO'));out.rows.push({l:q.short||q.label,v:disp,lvl,alert:al});if(on&&q.minChars===1)out.rows.push({l:q.note,v:txt(n+'_note'),lvl:lvl+1,alert:al});if(al)(out.alerts=out.alerts||[]).push(q.alert+' (rilevato in campo: '+txt(n+'_note')+')');
+ if(on&&q.notes)q.notes.forEach(o=>out.rows.push({l:o.short,v:txt(n+'_'+o.key),lvl:lvl+1}));
+ if(on&&q.photoMin)(photos[q.name+'_foto'+suf]||[]).forEach((p,i,a)=>out.photos.push({cap:q.photoLabel+(a.length>1?' '+(i+1):''),src:p.src}));
+ if(on&&q.nested)q.nested.forEach(x=>qRows(x,suf,out,lvl+1));
+}
+function buildReport(){
+ const fmtDate=d=>d?d.split('-').reverse().join('/'):'';
+ const head=[['Codice OLO / W.O.',txt('wo')],['Data intervento',fmtDate(txt('data'))],['Squadra / impresa',txt('squadra')],['Tecnico',txt('tecnico')],['Indirizzo',txt('indirizzo')],['Comune',txt('comune')]];
+ const civ={title:'Civico e ROE',rows:[],photos:[]};CIVICO.forEach(q=>qRows(q,'',civ,0));
+ const sols=[...solBox.children].map((d,i)=>{const suf='__'+d.dataset.sol,o={title:solTitle(i),rows:[],photos:[],none:d.classList.contains('none')};
+  if(o.none)return o;
+  SOL_SECTIONS.forEach(sec=>sec.q.forEach(q=>qRows(q,suf,o,0)));
+  o.rows.push({l:'Descrizione della soluzione',v:txt('desc'+suf),lvl:0,long:true});
+  if(txt('altro'+suf))o.rows.push({l:'Altro',v:txt('altro'+suf),lvl:0,long:true});
+  (photos['sol_foto'+suf]||[]).forEach((p,k)=>o.photos.push({cap:'Foto della soluzione '+(k+1),src:p.src}));
+  return o});
+ return {head,civ,sols,alerts:civ.alerts||[]};
+}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function renderReport(R){
+ const rows=o=>`<table class="rp-table">${o.rows.map(r=>`<tr class="lvl${r.lvl}${r.long?' long':''}${r.alert?' alert':''}"><th>${esc(r.l)}</th><td>${esc(r.v)}</td></tr>`).join('')}</table>`;
+ const pics=o=>o.photos.length?`<div class="rp-photos">${o.photos.map(p=>`<figure><img src="${p.src}" alt="${esc(p.cap)}"/><figcaption>${esc(p.cap)}</figcaption></figure>`).join('')}</div>`:'';
+ document.getElementById('sreport').innerHTML=
+  `<div class="rp-hero"><h1>Sopralluogo – ${esc(R.head[0][1])}</h1><p class="rp-addr">${esc(R.head[4][1])}, ${esc(R.head[5][1])}</p><p class="rp-meta"><span>Data <b>${esc(R.head[1][1])}</b></span><span>Tecnico <b>${esc(R.head[3][1])}</b></span><span>Squadra / impresa <b>${esc(R.head[2][1])}</b></span></p></div>`+(R.alerts.length?`<div class="rp-alert">⚠ ATTENZIONE${R.alerts.map(a=>`<div>• ${esc(a)}</div>`).join('')}</div>`:'')+
+  `<div class="rp-sec"><h3 class="rp-title"><span>1</span>${esc(R.civ.title)}</h3>${rows(R.civ)}</div>`+
+  R.sols.map((o,i)=>`<div class="rp-sec"><h3 class="rp-title"><span>${i+2}</span>${esc(o.title)}</h3>${o.none?'<p class="rp-none">Non è presente una soluzione secondaria</p>':rows(o)}</div>`).join('')+
+  (R.sols.some(o=>o.photos.length)?`<div class="rp-sec rp-gallery"><h3 class="rp-title"><span>📷</span>Documentazione fotografica</h3>${R.sols.map((o,i)=>o.photos.length?`<div class="rp-group"><h4 class="rp-sub">Foto · ${esc(o.title)}</h4>${pics(o)}</div>`:'').join('')}</div>`:'');
+}
+function reportText(R){
+ const L=[];const line=r=>L.push('  '.repeat(r.lvl)+r.l+': '+(r.v||'-'));
+ L.push('SOPRALLUOGO – '+R.head[0][1]+' – '+R.head[1][1]);
+ L.push('Squadra: '+R.head[2][1]+' – Tecnico: '+R.head[3][1]);
+ L.push('Indirizzo: '+R.head[4][1]+', '+R.head[5][1]);
+ L.push('');L.push('CIVICO E ROE');R.civ.rows.forEach(line);
+ R.sols.forEach((o,i)=>{L.push('');L.push(o.title.toUpperCase());
+  if(o.none){L.push('Non è presente una soluzione secondaria.');return}
+  o.rows.forEach(line)});
+ return L.join('\n');
+}
+const xme=document.getElementById('sxme'),xmeText=document.getElementById('sxmeText'),xmeMsg=document.getElementById('sxmeMsg');
+function openXme(t){xmeText.value=t;xmeMsg.textContent='';xme.hidden=false;document.body.classList.add('modal-open');setTimeout(()=>document.getElementById('sxmeCopy').focus(),50)}
+function closeXme(){xme.hidden=true;document.body.classList.remove('modal-open')}
+document.getElementById('sxmeClose').addEventListener('click',closeXme);
+xme.addEventListener('click',e=>{if(e.target===xme)closeXme()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!xme.hidden)closeXme()});
+xmeText.addEventListener('focus',()=>xmeText.select());
+document.getElementById('sxmeCopy').addEventListener('click',async()=>{
+ let ok=false;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(xmeText.value);ok=true}}catch(e){}
+ if(!ok){try{xmeText.focus();xmeText.select();xmeText.setSelectionRange(0,xmeText.value.length);ok=document.execCommand('copy')}catch(e){}}
+ xmeMsg.className='xme-msg '+(ok?'ok':'err');xmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
+});
+async function printReport(){
+ const imgs=[...root.querySelectorAll('#sreport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
  const old=document.title,olo=val('wo').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Sopralluogo';
  const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
- setTimeout(()=>window.print(),250);
+ setTimeout(()=>window.print(),200);
+}
+document.getElementById('sxmePdf').addEventListener('click',()=>{closeXme();printReport()});
+document.getElementById('sbtnPdf').addEventListener('click',()=>{
+ if(solBox.children.length<2){addSolution();addSolution()}
+ const bad=validate(form);updateStates();
+ if(bad.length){const sols=[...new Set(bad.map(f=>f.closest('.solution')).filter(Boolean))].map(d=>d.querySelector('.sol-title').textContent);
+  showStatus('err',(bad.length===1?'C’è 1 campo da correggere':'Ci sono '+bad.length+' campi da correggere')+' prima di generare PDF e testo.'+(sols.length?' Da completare: '+sols.join(', ')+'.':''));
+  const sd=bad[0].closest('.solution');if(sd&&!sd.classList.contains('open'))openSolution(sd,true);
+  setTimeout(()=>{const el=bad[0].querySelector('input:not([type=file]),textarea');try{el&&el.focus({preventScroll:true})}catch(e){}bad[0].scrollIntoView({behavior:'smooth',block:'center'})},sd?120:0);return}
+ const R=buildReport();renderReport(R);
+ showStatus('ok','Controllo completato. Copia il testo per XME e genera il PDF dalla finestra che si è aperta.');
+ openXme(reportText(R));
 });
 
 /* ---------- Bozza / Reset ---------- */
 function todayLocal(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 document.getElementById('sbtnSave').addEventListener('click',()=>{
- const data={};[...form.elements].forEach(e=>{if(!e.name||e.type==='file')return;if(e.type==='radio'){if(e.checked)data[e.name]=e.value}else if(e.type==='checkbox'){(data[e.name]=data[e.name]||[]);if(e.checked)data[e.name].push(e.value)}else data[e.name]=e.value});
+ const data={_sols:[...solBox.children].map(d=>+d.dataset.sol)};
+ [...form.elements].forEach(e=>{if(!e.name||e.type==='file')return;if(e.type==='radio'){if(e.checked)data[e.name]=e.value}else if(e.type==='checkbox'){(data[e.name]=data[e.name]||[]);if(e.checked)data[e.name].push(e.value)}else data[e.name]=e.value});
  try{localStorage.setItem(DRAFT_KEY,JSON.stringify(data));showStatus('ok','Bozza salvata su questo dispositivo. Le fotografie, per sicurezza, dovranno essere ricaricate.')}catch(e){showStatus('err','Impossibile salvare la bozza su questo dispositivo (memoria del browser non disponibile o piena).')}
 });
+function clearSolutions(){[...solBox.children].forEach(d=>d.querySelectorAll('[data-photo-field]').forEach(f=>{delete photos[f.dataset.photoField];delete PHOTO_CFG[f.dataset.photoField]}));solBox.innerHTML='';sc=0}
 document.getElementById('sbtnLoad').addEventListener('click',()=>{
  let raw=null;try{raw=localStorage.getItem(DRAFT_KEY)}catch(e){}
  if(!raw)return showStatus('err','Nessuna bozza salvata su questo dispositivo.');
  let data;try{data=JSON.parse(raw)}catch(e){return showStatus('err','La bozza salvata non è leggibile.')}
+ if(Array.isArray(data._sols)&&data._sols.length){clearSolutions();data._sols.forEach(id=>addSolution(id))}
  [...form.elements].forEach(e=>{if(!e.name||e.type==='file'||!(e.name in data))return;const v=data[e.name];
   if(e.type==='radio')e.checked=e.value===v;else if(e.type==='checkbox')e.checked=Array.isArray(v)&&v.includes(e.value);else e.value=v});
- sync();root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));showStatus('ok','Bozza caricata. Ricaricare le fotografie prima di generare il PDF.');
+ sync();updateStates();root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));showStatus('ok','Bozza caricata. Ricaricare le fotografie prima di generare il PDF.');
 });
 document.getElementById('sbtnReset').addEventListener('click',()=>{
  if(!confirm('Reset: cancellare tutti i campi e le fotografie?'))return;
- form.reset();Object.keys(photos).forEach(k=>{photos[k]=[];renderPhotos(k);const f=root.querySelector(`[data-photo-field="${k}"]`);f.querySelector('.msg').textContent='';f.querySelector('.mphoto').classList.remove('bad')});
- form.elements.data.value=todayLocal();document.getElementById('gpsStatus').textContent='Premi “Rileva” davanti al civico per inserire la posizione GPS, oppure scrivi le coordinate.';
- root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));sync();statusBox.className='status';statusBox.textContent='';window.scrollTo({top:0});
+ form.reset();clearSolutions();Object.keys(photos).forEach(k=>{photos[k]=[];renderPhotos(k)});
+ addSolution();addSolution();form.elements.data.value=todayLocal();
+ root.querySelectorAll('[data-gps-status]').forEach(st=>st.textContent=st.dataset.gpsStatus==='s_coordinate_roe'?'Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.':'Premi “Rileva” davanti al civico per inserire la posizione GPS, oppure scrivi le coordinate.');
+ root.querySelectorAll('.field.invalid').forEach(f=>setErr(f,''));sync();updateStates();statusBox.className='status';statusBox.textContent='';window.scrollTo({top:0});
 });
 
-form.elements.data.value=todayLocal();sync();
-window.__sopr={photos,validate,PHOTO_CFG};
+addSolution();addSolution();form.elements.data.value=todayLocal();sync();updateStates();
+window.__sopr={photos,validate,PHOTO_CFG,addSolution,openSolution,buildReport,reportText};
 })();
 </script>
 <script>
@@ -885,7 +1170,7 @@ function addFiber(id){if(id)fc=Math.max(fc,id);else id=++fc;
  d.innerHTML=`<div class="material-head"><strong>Fibra</strong><button type="button" class="danger btn-remove no-print">Rimuovi</button></div>
 <div class="grid3">
 <div class="field"><label for="b_fcol_${id}">Colore fibra <span class="req">*</span></label><select id="b_fcol_${id}" name="fcol_${id}" data-select><option value="">Seleziona</option>${COLORI.map(c=>`<option>${c}</option>`).join('')}</select><div class="err"></div></div>
-<div class="field"><label for="b_fpp_${id}">Porta patch panel (P.P.) <span class="req">*</span></label><input id="b_fpp_${id}" name="fpp_${id}" inputmode="numeric" placeholder="es. 255" data-text data-need-digit/><div class="err"></div></div>
+<div class="field"><label for="b_fpp_${id}">Porta permutatore (P.P.) <span class="req">*</span></label><input id="b_fpp_${id}" name="fpp_${id}" inputmode="numeric" placeholder="es. 255" data-text data-need-digit/><div class="err"></div></div>
 <div class="field"><label for="b_fes_${id}">Esito <span class="req">*</span></label><select id="b_fes_${id}" name="fes_${id}" data-select><option value="">Seleziona</option>${ESITI.map(c=>`<option>${c}</option>`).join('')}</select><div class="err"></div></div>
 </div>`;
  fibersBox.appendChild(d);
@@ -895,7 +1180,7 @@ document.getElementById('bbtnAddFiber').addEventListener('click',()=>{const d=ad
 
 /* ---------- Condizionati ---------- */
 function val(n){const e=form.elements[n];return e?e.value:''}
-function sync(){root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');c.classList.toggle('hidden',val(n)!==v)})}
+function sync(){root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');const cur=val(n);c.classList.toggle('hidden',v==='*'?!cur:cur!==v)})}
 form.addEventListener('change',sync);
 form.addEventListener('input',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
 form.addEventListener('change',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
@@ -956,16 +1241,78 @@ function validate(){
 function showStatus(type,msg){statusBox.className='status '+type;statusBox.textContent=msg}
 
 /* ---------- PDF ---------- */
-document.getElementById('bbtnPdf').addEventListener('click',async()=>{
- const bad=validate();
- if(bad.length){showStatus('err',(bad.length===1?'C’è 1 campo da correggere':'Ci sono '+bad.length+' campi da correggere')+' prima di generare il PDF.');
-  const el=bad[0].querySelector('input:not([type=file]),select,textarea');try{el&&el.focus({preventScroll:true})}catch(e){}
-  bad[0].scrollIntoView({behavior:'smooth',block:'center'});return}
- showStatus('ok','Controllo completato. Nella finestra di stampa seleziona “Salva come PDF”.');
- const imgs=[...root.querySelectorAll('.thumb img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
+/* ---------- Report (PDF) e testo XME ---------- */
+function txt(n){const e=form.elements[n];return e?String(e.value||'').trim():''}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function buildReport(){
+ const fmtDate=d=>d?d.split('-').reverse().join('/'):'';
+ const diverso=val('roe_diverso')==='SI';
+ const rete=[{l:'Indirizzo',v:txt('indirizzo')+', '+txt('comune')},{l:'Numero ROE',v:txt('roe')},{l:'Numero CNO',v:txt('cno')},
+  {l:'ROE diverso da pratica XME',v:diverso?'Sì':'No'}];
+ rete[3].alert=diverso;if(diverso)rete.push({l:'ROE da pratica XME',v:txt('roe_xme'),lvl:1,alert:true});
+ rete.push({l:'Coordinate ROE',v:txt('coordinate')});
+ const fibre=[...fibersBox.querySelectorAll('.fiber-row')].map((r,i)=>{const id=r.dataset.id;return {n:i+1,col:txt('fcol_'+id),pp:txt('fpp_'+id),es:txt('fes_'+id)}});
+ const pics=k=>(photos[k]||[]).map((p,i,a)=>({cap:PHOTO_CFG[k].label+(a.length>1?' '+(i+1):''),src:p.src}));
+ return {wo:txt('wo'),data:fmtDate(txt('data')),risorsa:txt('risorsa'),squadra:txt('squadra'),tecnico:txt('tecnico'),
+  rete,causa:txt('causa'),fibre,problema:txt('problema'),stato:val('predisposto'),
+  fotoRoe:[...pics('roe_aperto'),...pics('roe_chiuso')],fotoAgg:[...pics('cno'),...pics('misure')],
+  alerts:diverso?['ROE diverso da quello indicato in pratica XME (pratica: '+txt('roe_xme')+' – in campo: '+txt('roe')+')']:[]};
+}
+function renderReport(R){
+ const table=rows=>`<table class="rp-table">${rows.map(r=>`<tr class="lvl${r.lvl||0}${r.alert?' alert':''}"><th>${esc(r.l)}</th><td>${esc(r.v)}</td></tr>`).join('')}</table>`;
+ const sec=(n,t,body)=>`<div class="rp-sec"><h3 class="rp-title"><span>${n}</span>${esc(t)}</h3>${body}</div>`;
+ const pics=list=>`<div class="rp-photos">${list.map(p=>`<figure><img src="${p.src}" alt="${esc(p.cap)}"/><figcaption>${esc(p.cap)}</figcaption></figure>`).join('')}</div>`;
+ const fib=`<table class="rp-table rp-fibre"><thead><tr><th>#</th><th>Colore fibra</th><th>Porta permutatore (P.P.)</th><th>Esito</th></tr></thead><tbody>${R.fibre.map(f=>`<tr><td>${f.n}</td><td>${esc(f.col)}</td><td>${esc(f.pp)}</td><td>${esc(f.es)}</td></tr>`).join('')}</tbody></table>`;
+ document.getElementById('breport').innerHTML=
+  `<div class="rp-hero"><h1>Blocco tecnico On Field – ${esc(R.wo)}</h1><p class="rp-addr">${esc(R.rete[0].v)}</p><p class="rp-meta"><span>Data <b>${esc(R.data)}</b></span><span>ID risorsa <b>${esc(R.risorsa)}</b></span><span>Tecnico <b>${esc(R.tecnico)}</b></span><span>Squadra / impresa <b>${esc(R.squadra)}</b></span></p></div>`+(R.alerts.length?`<div class="rp-alert">⚠ ATTENZIONE${R.alerts.map(a=>`<div>• ${esc(a)}</div>`).join('')}</div>`:'')+
+  sec(1,'Indirizzo, ROE e CNO di riferimento',table(R.rete.slice(1)))+
+  sec(2,'Problema riscontrato',table([{l:'Causa del blocco',v:R.causa}]))+
+  sec(3,'Prove effettuate',fib)+
+  sec(4,'Descrizione problema riscontrato',`<p class="rp-text">${esc(R.problema)}</p>`)+
+  sec(5,'Stato dell’impianto',table([{l:'Impianto predisposto',v:R.stato}]))+
+  `<div class="rp-sec rp-gallery"><h3 class="rp-title"><span>📷</span>Documentazione fotografica</h3>`+
+  `<div class="rp-group"><h4 class="rp-sub">Foto · ROE</h4>${pics(R.fotoRoe)}</div>`+
+  (R.fotoAgg.length?`<div class="rp-group"><h4 class="rp-sub">Foto · Aggiuntive</h4>${pics(R.fotoAgg)}</div>`:'')+`</div>`;
+}
+function reportText(R){
+ const L=[];
+ L.push('BLOCCO TECNICO ON FIELD – '+R.wo+' – '+R.data);
+ L.push('ID risorsa: '+R.risorsa);
+ L.push('Squadra: '+R.squadra+' – Tecnico: '+R.tecnico);
+ L.push('');L.push('INDIRIZZO, ROE E CNO DI RIFERIMENTO');R.rete.forEach(r=>L.push('  '.repeat(r.lvl||0)+r.l+': '+r.v));
+ L.push('');L.push('PROBLEMA RISCONTRATO');L.push('Causa del blocco: '+R.causa);
+ L.push('');L.push('PROVE EFFETTUATE');R.fibre.forEach(f=>L.push('Fibra '+f.n+': '+f.col+' – P.P. '+f.pp+' – '+f.es));
+ L.push('');L.push('DESCRIZIONE PROBLEMA RISCONTRATO');L.push(R.problema);
+ L.push('');L.push('STATO DELL’IMPIANTO');L.push('Impianto predisposto: '+R.stato);
+ return L.join('\n');
+}
+const xme=document.getElementById('bxme'),xmeText=document.getElementById('bxmeText'),xmeMsg=document.getElementById('bxmeMsg');
+function openXme(t){xmeText.value=t;xmeMsg.textContent='';xme.hidden=false;document.body.classList.add('modal-open');setTimeout(()=>document.getElementById('bxmeCopy').focus(),50)}
+function closeXme(){xme.hidden=true;document.body.classList.remove('modal-open')}
+document.getElementById('bxmeClose').addEventListener('click',closeXme);
+xme.addEventListener('click',e=>{if(e.target===xme)closeXme()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!xme.hidden)closeXme()});
+xmeText.addEventListener('focus',()=>xmeText.select());
+document.getElementById('bxmeCopy').addEventListener('click',async()=>{
+ let ok=false;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(xmeText.value);ok=true}}catch(e){}
+ if(!ok){try{xmeText.focus();xmeText.select();xmeText.setSelectionRange(0,xmeText.value.length);ok=document.execCommand('copy')}catch(e){}}
+ xmeMsg.className='xme-msg '+(ok?'ok':'err');xmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
+});
+async function printReport(){
+ const imgs=[...root.querySelectorAll('#breport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
  const old=document.title,olo=val('wo').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Blocco tecnico On Field';
  const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
- setTimeout(()=>window.print(),250);
+ setTimeout(()=>window.print(),200);
+}
+document.getElementById('bxmePdf').addEventListener('click',()=>{closeXme();printReport()});
+document.getElementById('bbtnPdf').addEventListener('click',()=>{
+ const bad=validate();
+ if(bad.length){showStatus('err',(bad.length===1?'C’è 1 campo da correggere':'Ci sono '+bad.length+' campi da correggere')+' prima di generare PDF e testo.');
+  const el=bad[0].querySelector('input:not([type=file]),select,textarea');try{el&&el.focus({preventScroll:true})}catch(e){}
+  bad[0].scrollIntoView({behavior:'smooth',block:'center'});return}
+ const R=buildReport();renderReport(R);
+ showStatus('ok','Controllo completato. Copia il testo per XME e genera il PDF dalla finestra che si è aperta.');
+ openXme(reportText(R));
 });
 
 /* ---------- Bozza / Reset ---------- */
@@ -992,7 +1339,7 @@ document.getElementById('bbtnReset').addEventListener('click',()=>{
 });
 
 addFiber();form.elements.data.value=todayLocal();sync();
-window.__blocco={photos,validate,addFiber};
+window.__blocco={photos,validate,addFiber,buildReport,reportText};
 })();
 </script>
 <script>
