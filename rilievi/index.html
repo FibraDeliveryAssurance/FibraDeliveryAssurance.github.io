@@ -289,6 +289,7 @@ body.modal-open{overflow:hidden}
   .rp-text{margin:0;padding:1.5mm 2mm;white-space:pre-wrap;border-bottom:1px solid #d6dee6}
   .rp-alert{margin:0 0 4mm;padding:2.5mm 3.5mm;border:1.5px solid #b42318;background:#fdeceb!important;color:#b42318!important;font-weight:700;font-size:9.5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .rp-alert div{margin-top:.8mm}
+  .rp-table tr.key th,.rp-table tr.key td{background:#e7f0fa!important;color:#13293d;font-size:10pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .rp-table tr.alert th,.rp-table tr.alert td{color:#b42318!important;background:#fdeceb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .rp-hero{background:#13293d!important;color:#fff;padding:5mm 6mm 5.5mm;margin-bottom:5mm;position:relative;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .rp-hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.2mm;background:linear-gradient(90deg,#1f6fd1 0 25%,#e8780c 25% 50%,#2e9a4b 50% 75%,#8a5a35 75%);-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -318,6 +319,10 @@ body.modal-open{overflow:hidden}
   .rp-photos img{display:block;width:100%;height:108mm;object-fit:contain;background:#fff}
   .rp-photos figcaption{font-size:8pt;color:#46607a;padding-top:1mm}
 }
+
+.sol-type .field > label{font-size:1rem;color:var(--ink)}
+.sol-type .choice label{flex:1 1 140px}
+@media (max-width:420px){.sol-type .choice label{flex-basis:100%}}
 /* --- Rilievi: schermata di scelta --- */
 [hidden]{display:none!important}
 .launcher .choices-grid{display:grid;gap:14px;margin-top:4px}
@@ -377,7 +382,6 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <a class="app-card" href="#sopralluogo"><span class="ico" aria-hidden="true">📋</span><span class="txt"><strong>Sopralluogo</strong><span class="desc">Verifica tecnica preliminare con soluzioni individuate e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
 <a class="app-card" href="#blocco"><span class="ico" aria-hidden="true">⚠️</span><span class="txt"><strong>Blocco tecnico On Field</strong><span class="desc">Sospensione dell’attivazione per problema ottico, con verifica fibre e foto del ROE</span></span><span class="arrow" aria-hidden="true">›</span></a>
 </div>
-<p class="foot">Apri questa pagina in Chrome o Safari, non dall’anteprima di WhatsApp o della mail.</p>
 </div>
 <div id="app-riscontro" hidden>
 
@@ -514,7 +518,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 
 <section><h2><span class="num">2</span>Blocco tecnico</h2>
 
-<div class="qblock"><div class="field"><label for="b_causa">Causa del blocco <span class="req">*</span></label><select id="b_causa" name="causa" data-select><option value="">Seleziona</option><option>Mancanza continuità tra ROE e CNO</option><option>Mancanza continuità tra CNO e PCN</option><option>Fibra interrotta o danneggiata</option><option>Attenuazione fuori soglia</option><option>Fibra/porte esaurite</option><option>Altro</option></select><div class="err"></div></div>
+<div class="qblock"><div class="field"><label for="b_causa">Causa del blocco <span class="req">*</span></label><select id="b_causa" name="causa" data-select><option value="">Seleziona</option><option>Mancanza continuità tra ROE e CNO</option><option>Mancanza continuità tra CNO e PCN</option><option>Attenuazione fuori soglia</option><option>Fibra/porte esaurite (ROE saturo)</option><option>ROE da bonificare</option><option>Altro</option></select><div class="err"></div></div>
 <div class="conditional hidden" data-show-if="causa=*"><div class="field"><label for="b_problema">Descrivere il problema riscontrato <span class="cond">**</span></label><textarea id="b_problema" name="problema" data-text data-min-chars="10" placeholder="Es. fibre senza continuità tra ROE e CNO, prove effettuate, situazione riscontrata in campo…"></textarea><div class="err"></div></div></div></div>
 </section>
 
@@ -856,7 +860,9 @@ function solTitle(i){return i===0?'Soluzione principale':i===1?'Soluzione second
 function addSolution(id,open){
  if(id)sc=Math.max(sc,id);else id=++sc;const suf='__'+id;
  const kf='sol_foto'+suf;PHOTO_CFG[kf]={min:3,label:'Foto della soluzione',hint:'Almeno 3 foto della soluzione (percorso, punti di posa, criticità). Tocca il pulsante per ogni foto da aggiungere.'};
- const secs=SOL_SECTIONS.map(s=>`<section><h2><span class="num">${s.num}</span>${s.title}</h2>${s.q.map(q=>qHtml(q,suf)).join('')}</section>`).join('')+
+ const TIPI=['Scavo','IRU','Scavo + IRU','OL Espletabile','OL non espletabile'];
+ const tipo=`<section class="sol-type"><div class="field" data-group="tipo_sol${suf}"><label>Tipologia della soluzione <span class="req">*</span></label><div class="choice">${TIPI.map(t=>`<label><input name="tipo_sol${suf}" type="radio" value="${t}"/> ${t}</label>`).join('')}</div><div class="err"></div></div></section>`;
+ const secs=tipo+SOL_SECTIONS.map(s=>`<section><h2><span class="num">${s.num}</span>${s.title}</h2>${s.q.map(q=>qHtml(q,suf)).join('')}</section>`).join('')+
  `<section><h2><span class="num">6</span>Descrizione e foto della soluzione</h2><div class="grid">
  <div class="field full"><label for="s_desc${suf}">Descrizione della soluzione <span class="req">*</span></label><textarea id="s_desc${suf}" name="desc${suf}" data-text data-min-chars="10"></textarea><div class="err"></div></div>
  <div class="field full"><label for="s_altro${suf}">Altro</label><textarea id="s_altro${suf}" name="altro${suf}"></textarea></div>
@@ -1011,6 +1017,7 @@ function buildReport(){
  const civ={title:'Civico e ROE',rows:[],photos:[]};CIVICO.forEach(q=>qRows(q,'',civ,0));
  const sols=[...solBox.children].map((d,i)=>{const suf='__'+d.dataset.sol,o={title:solTitle(i),rows:[],photos:[],none:d.classList.contains('none')};
   if(o.none)return o;
+  o.rows.push({l:'Tipologia della soluzione',v:val('tipo_sol'+suf),lvl:0,key:true});
   SOL_SECTIONS.forEach(sec=>sec.q.forEach(q=>qRows(q,suf,o,0)));
   o.rows.push({l:'Descrizione della soluzione',v:txt('desc'+suf),lvl:0,long:true});
   if(txt('altro'+suf))o.rows.push({l:'Altro',v:txt('altro'+suf),lvl:0,long:true});
@@ -1020,7 +1027,7 @@ function buildReport(){
 }
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function renderReport(R){
- const rows=o=>`<table class="rp-table">${o.rows.map(r=>`<tr class="lvl${r.lvl}${r.long?' long':''}${r.alert?' alert':''}"><th>${esc(r.l)}</th><td>${esc(r.v)}</td></tr>`).join('')}</table>`;
+ const rows=o=>`<table class="rp-table">${o.rows.map(r=>`<tr class="lvl${r.lvl}${r.long?' long':''}${r.alert?' alert':''}${r.key?' key':''}"><th>${esc(r.l)}</th><td>${esc(r.v)}</td></tr>`).join('')}</table>`;
  const pics=o=>o.photos.length?`<div class="rp-photos">${o.photos.map(p=>`<figure><img src="${p.src}" alt="${esc(p.cap)}"/><figcaption>${esc(p.cap)}</figcaption></figure>`).join('')}</div>`:'';
  document.getElementById('sreport').innerHTML=
   `<div class="rp-hero"><h1>Sopralluogo – ${esc(R.head[0][1])}</h1><p class="rp-addr">${esc(R.head[4][1])}, ${esc(R.head[5][1])}</p><p class="rp-meta"><span>Data <b>${esc(R.head[1][1])}</b></span><span>Tecnico <b>${esc(R.head[3][1])}</b></span><span>Squadra / impresa <b>${esc(R.head[2][1])}</b></span></p></div>`+(R.alerts.length?`<div class="rp-alert">⚠ ATTENZIONE${R.alerts.map(a=>`<div>• ${esc(a)}</div>`).join('')}</div>`:'')+
