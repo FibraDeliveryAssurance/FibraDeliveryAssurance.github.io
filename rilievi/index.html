@@ -518,7 +518,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 
 <section><h2><span class="num">2</span>Blocco tecnico</h2>
 
-<div class="qblock"><div class="field"><label for="b_causa">Causa del blocco <span class="req">*</span></label><select id="b_causa" name="causa" data-select><option value="">Seleziona</option><option>Mancanza continuità tra ROE e CNO</option><option>Mancanza continuità tra CNO e PCN</option><option>Attenuazione fuori soglia</option><option>Fibra/porte esaurite (ROE saturo)</option><option>ROE da bonificare</option><option>Altro</option></select><div class="err"></div></div>
+<div class="qblock"><div class="field"><label for="b_causa">Causa del blocco <span class="req">*</span></label><select id="b_causa" name="causa" data-select><option value="">Seleziona</option><option>Mancanza continuità tra ROE e CNO</option><option>Mancanza continuità tra CNO e PCN</option><option>Attenuazione fuori soglia</option><option>Fibra/porte esaurite (ROE saturo)</option><option>ROE da bonificare</option><option>Mancanza segnale Splitter</option><option>Altro</option></select><div class="err"></div></div>
 <div class="conditional hidden" data-show-if="causa=*"><div class="field"><label for="b_problema">Descrivere il problema riscontrato <span class="cond">**</span></label><textarea id="b_problema" name="problema" data-text data-min-chars="10" placeholder="Es. fibre senza continuità tra ROE e CNO, prove effettuate, situazione riscontrata in campo…"></textarea><div class="err"></div></div></div></div>
 </section>
 
@@ -547,7 +547,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 </section>
 
 <section><h2><span class="num">6</span>Fotografie aggiuntive</h2>
-<p class="section-intro">Facoltative: allegare se utili a documentare il problema.</p>
+<p class="section-intro" id="bFotoAggIntro">Facoltative: allegare se utili a documentare il problema.</p>
 <div class="photo-grid">
 <div class="field" data-photo-field="cno"></div>
 <div class="field" data-photo-field="misure"></div>
@@ -1187,7 +1187,13 @@ document.getElementById('bbtnAddFiber').addEventListener('click',()=>{const d=ad
 
 /* ---------- Condizionati ---------- */
 function val(n){const e=form.elements[n];return e?e.value:''}
-function sync(){root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');const cur=val(n);c.classList.toggle('hidden',v==='*'?!cur:cur!==v)})}
+const CNO_REQ=['Mancanza continuità tra ROE e CNO','Mancanza continuità tra CNO e PCN','Mancanza segnale Splitter'];
+function syncCnoPhoto(){const need=CNO_REQ.includes(val('causa')),c=PHOTO_CFG.cno,f=root.querySelector('[data-photo-field="cno"]');if(!f)return;
+ c.min=need?1:0;c.req=need;f.querySelector('h3').innerHTML='CNO '+(need?'<span class="req">*</span>':'<span class="cond">(facoltativa)</span>');
+ f.querySelector('small').textContent=need?'Obbligatoria per la causa selezionata: foto del CNO.':'Facoltativa: foto del CNO.';
+ document.getElementById('bFotoAggIntro').textContent=need?'La foto del CNO è obbligatoria per la causa del blocco selezionata; la foto delle misure resta facoltativa.':'Facoltative: allegare se utili a documentare il problema.';
+ if(!need)setErr(f,'');renderPhotos('cno')}
+function sync(){root.querySelectorAll('[data-show-if]').forEach(c=>{const [n,v]=c.dataset.showIf.split('=');const cur=val(n);c.classList.toggle('hidden',v==='*'?!cur:cur!==v)});syncCnoPhoto()}
 form.addEventListener('change',sync);
 form.addEventListener('input',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
 form.addEventListener('change',e=>{const f=e.target.closest('.field');if(f&&f.classList.contains('invalid'))setErr(f,'')});
