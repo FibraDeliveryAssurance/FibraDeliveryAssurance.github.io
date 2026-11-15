@@ -901,7 +901,9 @@ const SOL_SECTIONS=[
     {key:'ente',short:'Ente competenza IRU',label:'Indicare ente competenza tratta IRU (ED, TIM, IP, ecc.)',minChars:2},
     {key:'tipo',short:'Tipo tratta IRU',label:'Indicare se tratta IRU è aerea e/o interrata',minChars:5}]}]},
  {num:4,title:'Attrezzature e posa',q:[
-  {name:'cestello',short:'Cestello',label:'È necessario il cestello?',trigger:'SI',note:'Dettagli sull’utilizzo del cestello',photoMin:1,photoLabel:'Foto punto di lavoro con cestello'},
+  {name:'cestello',short:'Cestello',label:'È necessario il cestello?',trigger:'SI',note:'Dettagli sull’utilizzo del cestello',photoMin:1,photoLabel:'Foto punto di lavoro con cestello',nested:[
+    {name:'chiusura_cest',short:'Chiusura strada per cestello',label:'È necessario chiudere la strada per utilizzare il cestello?',trigger:'SI',noNote:true,alert:'Chiusura strada necessaria per l’utilizzo del cestello',alertOn:'SI'},
+    {extra:'ente',key:'ente_cest'}]},
   {name:'scala',short:'Scala alta',label:'È necessaria la scala alta?',trigger:'SI',note:'Dettagli sull’utilizzo della scala alta'},
   {name:'multifibra',short:'Multifibra',label:'È necessario posare il Multifibra?',trigger:'SI',note:'Indicare i metri di cavo necessari',num:true},
   {name:'microcavo',short:'Microcavo + PTE',label:'È necessario posare il Microcavo + PTE?',trigger:'SI',note:'Indicare i metri di cavo necessari',num:true}]},
@@ -910,18 +912,19 @@ const SOL_SECTIONS=[
   {name:'cliente',short:'Lavori a carico del cliente',label:'Sono necessari lavori a carico del cliente?',trigger:'SI',note:'Dettagli sui lavori a carico del cliente',photoMin:1,photoLabel:'Foto lavori a carico del cliente'}]}
 ];
 const PHOTO_CFG={};
-function extraHtml(x,suf){
+function extraHtml(x,suf,q={}){
  if(x==='coordinate')return `<div class="qblock"><div class="field"><label for="s_coordinate">Coordinate civico <span class="req">*</span></label><div class="gps-row"><input id="s_coordinate" name="coordinate" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" data-gps-for="s_coordinate" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="s_coordinate">Premi “Rileva” davanti al civico per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>`;
  if(x==='coordinate_roe')return `<div class="qblock"><div class="field"><label for="s_coordinate_roe">Coordinate ROE <span class="req">*</span></label><div class="gps-row"><input id="s_coordinate_roe" name="coordinate_roe" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord/><button class="secondary no-print" data-gps-for="s_coordinate_roe" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="s_coordinate_roe">Premi “Rileva” davanti al ROE per inserire la posizione GPS, oppure scrivi le coordinate.</div><div class="err"></div></div></div>`;
  if(x==='ui')return `<div class="qblock"><div class="field"><label for="s_ui">Numero di unità immobiliari (UI) <span class="req">*</span></label><input id="s_ui" name="ui" type="number" inputmode="numeric" min="1" step="1" data-int/><div class="err"></div></div></div>`;
- if(x==='ente')return `<div class="qblock"><div class="field" data-group="ente${suf}"><label>Ente competente della strada <span class="req">*</span> <span class="cond">(anche più di uno)</span></label><div class="choice multi"><label><input name="ente${suf}" type="checkbox" value="Comune"/> Comune</label><label><input name="ente${suf}" type="checkbox" value="Provincia"/> Provincia</label><label><input name="ente${suf}" type="checkbox" value="ANAS"/> ANAS</label><label><input name="ente${suf}" type="checkbox" value="Strada privata"/> Strada privata</label></div><div class="err"></div></div></div>`;
+ if(x==='ente')return `<div class="qblock"><div class="field" data-group="${(q.key||'ente')+suf}"><label>Ente competente della strada <span class="req">*</span> <span class="cond">(anche più di uno)</span></label><div class="choice multi"><label><input name="${(q.key||'ente')+suf}" type="checkbox" value="Comune"/> Comune</label><label><input name="${(q.key||'ente')+suf}" type="checkbox" value="Provincia"/> Provincia</label><label><input name="${(q.key||'ente')+suf}" type="checkbox" value="ANAS"/> ANAS</label><label><input name="${(q.key||'ente')+suf}" type="checkbox" value="Strada privata"/> Strada privata</label></div><div class="err"></div></div></div>`;
 }
 function qHtml(q,suf=''){
- if(q.extra)return extraHtml(q.extra,suf);
+ if(q.extra)return extraHtml(q.extra,suf,q);
  const n=q.name+suf;
  const opt=v=>`<label><input name="${n}" type="radio" value="${v}"/> ${v==='SI'?'Sì':'No'}</label>`;
  let cond='';
- if(q.notes)cond=q.notes.map(o=>`<div class="field"><label for="s_${n}_${o.key}">${o.label} <span class="cond">**</span></label><textarea id="s_${n}_${o.key}" name="${n}_${o.key}" data-text data-min-chars="${o.minChars}"></textarea><div class="err"></div></div>`).join('');
+ if(q.noNote)cond='';
+ else if(q.notes)cond=q.notes.map(o=>`<div class="field"><label for="s_${n}_${o.key}">${o.label} <span class="cond">**</span></label><textarea id="s_${n}_${o.key}" name="${n}_${o.key}" data-text data-min-chars="${o.minChars}"></textarea><div class="err"></div></div>`).join('');
  else if(q.num)cond=`<div class="field"><label for="s_${n}_note">${q.note} <span class="cond">**</span></label><input id="s_${n}_note" name="${n}_note" inputmode="decimal" placeholder="metri, es. 12,5" data-num/><div class="err"></div></div>`;
  else if(q.minChars===1)cond=`<div class="field"><label for="s_${n}_note">${q.note} <span class="cond">**</span></label><input id="s_${n}_note" name="${n}_note" autocapitalize="characters" data-text/><div class="err"></div></div>`;
  else cond=`<div class="field"><label for="s_${n}_note">${q.note} <span class="cond">**</span></label><textarea id="s_${n}_note" name="${n}_note" data-text data-min-chars="5"></textarea><div class="err"></div></div>`;
@@ -1079,11 +1082,11 @@ function qRows(q,suf,out,lvl){
   if(q.extra==='coordinate')out.rows.push({l:'Coordinate civico',v:txt('coordinate'),lvl});
   else if(q.extra==='coordinate_roe')out.rows.push({l:'Coordinate ROE',v:txt('coordinate_roe'),lvl});
   else if(q.extra==='ui')out.rows.push({l:'Unità immobiliari (UI)',v:txt('ui'),lvl});
-  else if(q.extra==='ente')out.rows.push({l:'Ente competente della strada',v:[...form.querySelectorAll('[name="ente'+suf+'"]:checked')].map(e=>e.value).join(', '),lvl});
+  else if(q.extra==='ente')out.rows.push({l:'Ente competente della strada',v:[...form.querySelectorAll('[name="'+(q.key||'ente')+suf+'"]:checked')].map(e=>e.value).join(', '),lvl});
   return}
  const n=q.name+suf,v=val(n),on=v===q.trigger;let disp=yn(v);
  if(on&&q.num)disp+=' – '+txt(n+'_note').replace('.',',')+' m';
- else if(on&&!q.notes&&q.minChars!==1)disp+=' – '+txt(n+'_note');
+ else if(on&&!q.notes&&!q.noNote&&q.minChars!==1)disp+=' – '+txt(n+'_note');
  const al=!!(q.alert&&v===(q.alertOn||'NO'));out.rows.push({l:q.short||q.label,v:disp,lvl,alert:al});if(on&&q.minChars===1)out.rows.push({l:q.note,v:txt(n+'_note'),lvl:lvl+1,alert:al});if(al)(out.alerts=out.alerts||[]).push(q.alert+' (rilevato in campo: '+txt(n+'_note')+')');
  if(on&&q.notes)q.notes.forEach(o=>out.rows.push({l:o.short,v:txt(n+'_'+o.key),lvl:lvl+1}));
  if(on&&q.photoMin)(photos[q.name+'_foto'+suf]||[]).forEach((p,i,a)=>out.photos.push({cap:q.photoLabel+(a.length>1?' '+(i+1):''),src:p.src}));
