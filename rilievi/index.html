@@ -391,7 +391,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <a class="app-card" href="#riscontro"><span class="ico" aria-hidden="true">✅</span><span class="txt"><strong>Riscontro attività</strong><span class="desc">Rapporto di fine lavori con dati tecnici, materiali e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
 <a class="app-card" href="#sopralluogo"><span class="ico" aria-hidden="true">📋</span><span class="txt"><strong>Sopralluogo</strong><span class="desc">Verifica tecnica preliminare con soluzioni individuate e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
 <a class="app-card" href="#blocco"><span class="ico" aria-hidden="true">⚠️</span><span class="txt"><strong>Blocco tecnico On Field</strong><span class="desc">Sospensione dell’attivazione per problema ottico, con verifica fibre e foto del ROE</span></span><span class="arrow" aria-hidden="true">›</span></a>
-<a class="app-card" href="#cambio"><span class="ico" aria-hidden="true">🔀</span><span class="txt"><strong>Cambio ROE-CNO</strong><span class="desc">Richiesta di riprogettazione GPON su ROE e CNO diversi da quelli di pratica</span></span><span class="arrow" aria-hidden="true">›</span></a>
+<a class="app-card" href="#cambio"><span class="ico" aria-hidden="true">🔀</span><span class="txt"><strong>Cambio ROE-CNO-Civico</strong><span class="desc">Richiesta di riprogettazione GPON su ROE e CNO diversi da quelli di pratica</span></span><span class="arrow" aria-hidden="true">›</span></a>
 <a class="app-card" href="#istanze"><span class="beta-pin">Beta</span><span class="ico" aria-hidden="true">🚧</span><span class="txt"><strong>Istanze scavo</strong><span class="desc">Comunicazione e ordinanza per scavi inferiori ai 40 m (nuovo decreto) – richiede il file chiave</span></span><span class="arrow" aria-hidden="true">›</span></a>
 </div>
 </div>
@@ -592,7 +592,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div id="app-cambio" hidden>
 <div class="app">
 <a class="back-link no-print" href="#">‹ Torna alla scelta del modulo</a>
-<header><h1>Cambio ROE-CNO</h1><p>Richiesta di riprogettazione GPON su ROE e CNO diversi</p><div class="legend"><span><b>*</b> Sempre obbligatorio</span><span><b>**</b> Obbligatorio quando applicabile</span></div></header>
+<header><h1>Cambio ROE-CNO-Civico</h1><p>Richiesta di riprogettazione GPON su ROE e CNO diversi</p><div class="legend"><span><b>*</b> Sempre obbligatorio</span><span><b>**</b> Obbligatorio quando applicabile</span></div></header>
 
 <form id="cf" novalidate autocomplete="off">
 
@@ -1553,14 +1553,14 @@ function renderReport(R){
  const table=rows=>`<table class="rp-table">${rows.map(r=>`<tr class="lvl${r.lvl||0}${r.alert?' alert':''}"><th>${esc(r.l)}</th><td>${esc(r.v)}</td></tr>`).join('')}</table>`;
  const sec=(n,t,body)=>`<div class="rp-sec"><h3 class="rp-title"><span>${n}</span>${esc(t)}</h3>${body}</div>`;
  document.getElementById('creport').innerHTML=
-  `<div class="rp-hero"><h1>Cambio ROE-CNO – ${esc(R.wo)}</h1><p class="rp-addr">${esc(R.addr)}</p><p class="rp-meta"><span>Data <b>${esc(R.data)}</b></span><span>ID risorsa <b>${esc(R.risorsa)}</b></span><span>Tecnico <b>${esc(R.tecnico)}</b></span><span>Squadra / impresa <b>${esc(R.squadra)}</b></span></p></div>`+
+  `<div class="rp-hero"><h1>Cambio ROE-CNO-Civico – ${esc(R.wo)}</h1><p class="rp-addr">${esc(R.addr)}</p><p class="rp-meta"><span>Data <b>${esc(R.data)}</b></span><span>ID risorsa <b>${esc(R.risorsa)}</b></span><span>Tecnico <b>${esc(R.tecnico)}</b></span><span>Squadra / impresa <b>${esc(R.squadra)}</b></span></p></div>`+
   (R.alerts.length?`<div class="rp-alert">⚠ ATTENZIONE${R.alerts.map(a=>`<div>• ${esc(a)}</div>`).join('')}</div>`:'')+
   sec(1,'Civico',table(R.civ))+sec(2,'ROE e CNO per la riprogettazione GPON',table(R.rete))+
   `<div class="rp-sec rp-gallery"><h3 class="rp-title"><span>📷</span>Documentazione fotografica</h3><div class="rp-group"><h4 class="rp-sub">Foto · ROE</h4><div class="rp-photos">${photos.roe.map(p=>`<figure><img src="${p.src}" alt="Foto del ROE"/><figcaption>Foto del ROE – ${esc(R.rete[0].v)}</figcaption></figure>`).join('')}</div></div></div>`;
 }
 function reportText(R){
  const L=[],line=r=>L.push('  '.repeat(r.lvl||0)+r.l+': '+r.v);
- L.push('CAMBIO ROE-CNO – '+R.wo+' – '+R.data);
+ L.push('CAMBIO ROE-CNO-CIVICO – '+R.wo+' – '+R.data);
  L.push('ID risorsa: '+R.risorsa);
  L.push('Squadra: '+R.squadra+' – Tecnico: '+R.tecnico);
  L.push('Indirizzo: '+R.addr);
@@ -1582,7 +1582,7 @@ document.getElementById('cxmeCopy').addEventListener('click',async()=>{
 });
 async function printReport(){
  const imgs=[...root.querySelectorAll('#creport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
- const old=document.title,olo=txt('wo').replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Cambio ROE-CNO';
+ const old=document.title,olo=txt('wo').replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Cambio ROE-CNO-Civico';
  const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
  setTimeout(()=>window.print(),200);
 }
@@ -1624,7 +1624,7 @@ window.__cambio={validate,buildReport,reportText,photos};
 <script>
 (function(){
  const L=document.getElementById('launcher'),R=document.getElementById('app-riscontro'),S=document.getElementById('app-sopralluogo'),B=document.getElementById('app-blocco'),C=document.getElementById('app-cambio'),I=document.getElementById('app-istanze');
- const TITLES={riscontro:'Riscontro attività',sopralluogo:'Sopralluogo',blocco:'Blocco tecnico On Field',cambio:'Cambio ROE-CNO',istanze:'Istanze scavo'};
+ const TITLES={riscontro:'Riscontro attività',sopralluogo:'Sopralluogo',blocco:'Blocco tecnico On Field',cambio:'Cambio ROE-CNO-Civico',istanze:'Istanze scavo'};
  function show(){const k=(location.hash||'').replace('#','');const name=TITLES[k]?k:'';
   L.hidden=!!name;R.hidden=name!=='riscontro';S.hidden=name!=='sopralluogo';B.hidden=name!=='blocco';C.hidden=name!=='cambio';I.hidden=name!=='istanze';if(name==='istanze')loadIstanze();document.title=name?TITLES[name]:'Rilievi';window.scrollTo(0,0)}
  /* Istanze scavo: caricato in un riquadro isolato al primo utilizzo, così stili e codice non interferiscono con gli altri moduli */
