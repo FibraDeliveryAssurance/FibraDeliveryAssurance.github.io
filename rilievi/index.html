@@ -328,6 +328,9 @@ body.modal-open{overflow:hidden}
 .app-card{position:relative}
 .beta-pin{position:absolute;top:-9px;right:12px;padding:3px 10px;border-radius:999px;background:#e8780c;color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 6px #0003}
 .beta-pin.inline{position:static;box-shadow:none}
+.app-card .esito{display:inline-block;margin:0 0 6px;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700;line-height:1.2}
+.app-card .esito.ok{background:#e9f6ef;color:#17784f;border:1px solid #17784f55}
+.app-card .esito.ko{background:#fdeceb;color:#b42318;border:1px solid #b4231855}
 .istanze-bar{max-width:860px;margin:0 auto;padding:10px 16px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .istanze-bar .back-link{margin:0}
 .istanze-loading{max-width:860px;margin:20px auto;padding:0 16px;color:var(--muted)}
@@ -388,10 +391,10 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div class="app launcher" id="launcher">
 <header><h1>Rilievi</h1><p>Seleziona il modulo da compilare</p></header>
 <div class="choices-grid">
-<a class="app-card" href="#riscontro"><span class="ico" aria-hidden="true">✅</span><span class="txt"><strong>Riscontro attività</strong><span class="desc">Rapporto di fine lavori con dati tecnici, materiali e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
-<a class="app-card" href="#sopralluogo"><span class="ico" aria-hidden="true">📋</span><span class="txt"><strong>Sopralluogo</strong><span class="desc">Verifica tecnica preliminare con soluzioni individuate e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
-<a class="app-card" href="#blocco"><span class="ico" aria-hidden="true">⚠️</span><span class="txt"><strong>Blocco tecnico On Field</strong><span class="desc">Sospensione dell’attivazione per problema ottico, con verifica fibre e foto del ROE</span></span><span class="arrow" aria-hidden="true">›</span></a>
-<a class="app-card" href="#cambio"><span class="ico" aria-hidden="true">🔀</span><span class="txt"><strong>Cambio ROE-CNO-Civico</strong><span class="desc">Richiesta di riprogettazione GPON su ROE e CNO diversi da quelli di pratica</span></span><span class="arrow" aria-hidden="true">›</span></a>
+<a class="app-card" href="#riscontro"><span class="ico" aria-hidden="true">✅</span><span class="txt"><span class="esito ok">Attivazione completata</span><strong>Riscontro attività</strong><span class="desc">Rapporto di fine lavori con dati tecnici, materiali e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
+<a class="app-card" href="#sopralluogo"><span class="ico" aria-hidden="true">📋</span><span class="txt"><span class="esito ko">Sospensione attivazione</span><strong>Sopralluogo</strong><span class="desc">Verifica tecnica preliminare con soluzioni individuate e fotografie</span></span><span class="arrow" aria-hidden="true">›</span></a>
+<a class="app-card" href="#blocco"><span class="ico" aria-hidden="true">⚠️</span><span class="txt"><span class="esito ko">Sospensione attivazione</span><strong>Blocco tecnico On Field</strong><span class="desc">Sospensione dell’attivazione per problema ottico, con verifica fibre e foto del ROE</span></span><span class="arrow" aria-hidden="true">›</span></a>
+<a class="app-card" href="#cambio"><span class="ico" aria-hidden="true">🔀</span><span class="txt"><span class="esito ko">Sospensione attivazione</span><strong>Cambio ROE-CNO-Civico</strong><span class="desc">Richiesta di riprogettazione GPON su ROE e CNO diversi da quelli di pratica</span></span><span class="arrow" aria-hidden="true">›</span></a>
 <a class="app-card" href="#istanze"><span class="beta-pin">Beta</span><span class="ico" aria-hidden="true">🚧</span><span class="txt"><strong>Istanze scavo</strong><span class="desc">Comunicazione e ordinanza per scavi inferiori ai 40 m (nuovo decreto) – richiede il file chiave</span></span><span class="arrow" aria-hidden="true">›</span></a>
 </div>
 </div>
