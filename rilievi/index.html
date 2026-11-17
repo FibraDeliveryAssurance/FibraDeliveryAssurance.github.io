@@ -328,6 +328,7 @@ body.modal-open{overflow:hidden}
 .app-card{position:relative}
 .beta-pin{position:absolute;top:-9px;right:12px;padding:3px 10px;border-radius:999px;background:#e8780c;color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 2px 6px #0003}
 .beta-pin.inline{position:static;box-shadow:none}
+fieldset.r-attiv{border:0;margin:0;padding:0;min-inline-size:0}
 .app-card .esito{display:inline-block;margin:0 0 6px;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700;line-height:1.2}
 .app-card .esito.ok{background:#e9f6ef;color:#17784f;border:1px solid #17784f55}
 .app-card .esito.ko{background:#fdeceb;color:#b42318;border:1px solid #b4231855}
@@ -386,6 +387,32 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 }
 
 </style>
+<script>
+/* PDF entro il limite di XME (4 MB): se le foto del rapporto pesano troppo vengono ricompresse,
+   solo quanto basta, partendo da quelle più pesanti. Le foto sono stampate a circa 9 x 11 cm:
+   1200-1600 px sul lato lungo corrispondono a 300 dpi o più, quindi la qualità resta piena. */
+const PDF_IMG_BUDGET=3.3e6;
+const PDF_STEPS=[[1600,.8],[1600,.72],[1440,.7],[1280,.68],[1150,.65],[1024,.62],[900,.6],[800,.55],[700,.5],[600,.45]];
+function _b64bytes(src){const i=src.indexOf(',');return Math.round((src.length-i-1)*3/4)}
+function _loadImg(src){return new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src})}
+function _enc(im,side,q){const k=Math.min(1,side/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)}
+async function fitPdfImages(sel){
+ const imgs=[...document.querySelectorAll(sel+' img')].filter(i=>(i.getAttribute('src')||'').startsWith('data:image'));
+ if(!imgs.length)return;
+ let items=imgs.map(el=>({el,src:el.getAttribute('src'),b:_b64bytes(el.getAttribute('src'))}));
+ const total=()=>items.reduce((t,x)=>t+x.b,0);
+ if(total()<=PDF_IMG_BUDGET)return;
+ /* quota per foto: le foto già leggere tengono il loro peso, il resto del budget va diviso tra le altre */
+ let big=items.slice(),fixed=0,target=0;
+ for(let g=0;g<5;g++){target=(PDF_IMG_BUDGET-fixed)/Math.max(1,big.length);const small=big.filter(x=>x.b<=target);if(!small.length)break;fixed+=small.reduce((t,x)=>t+x.b,0);big=big.filter(x=>x.b>target)}
+ big.sort((a,b)=>b.b-a.b);
+ for(const it of big){const im=await _loadImg(it.src);if(!im)continue;
+  for(const [side,q] of PDF_STEPS){const out=_enc(im,side,q),nb=_b64bytes(out);if(nb<it.b){it.src=out;it.b=nb}if(it.b<=target)break}
+  it.el.src=it.src}
+ await Promise.all(items.map(x=>x.el.decode?x.el.decode().catch(()=>{}):0));
+ if(total()>PDF_IMG_BUDGET*1.15)alert('Hai caricato molte foto oltre a quelle richieste: togli quelle in più per stare entro i 4 MB di XME');
+}
+</script>
 </head>
 <body>
 <div class="app launcher" id="launcher">
@@ -405,7 +432,9 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 
 <header><h1>Riscontro attività</h1><p>Scheda tecnica di fine lavori con fotografie integrate</p><div class="legend"><span><b>*</b> Sempre obbligatorio</span><span><b>**</b> Obbligatorio quando applicabile</span></div></header>
 <form id="reportForm" novalidate="">
-<section><h2><span class="num">1</span>Identificazione attività</h2><div class="grid3">
+<section id="rTipoSec"><h2><span class="num">1</span>Tipo attività</h2><div class="field"><label>Tipo di attività <span class="req">*</span></label><div class="choice"><label><input name="tipo_att" required="" type="radio" value="Attivazione"/> Attivazione</label><label><input name="tipo_att" required="" type="radio" value="Migrazione"/> Migrazione</label></div></div><p class="section-intro no-print" id="rTipoHint" style="margin-top:12px">Scegli il tipo di attività per visualizzare il modulo da compilare.</p></section>
+<div id="rBody" hidden>
+<section><h2><span class="num">2</span>Identificazione attività</h2><div class="grid3">
 <div class="field"><label for="f_data">Data intervento <span class="req">*</span></label><input id="f_data" name="data" required="" type="date"/></div>
 <div class="field"><label for="f_inizio">Ora inizio <span class="req">*</span></label><input id="f_inizio" name="inizio" required="" type="time"/></div>
 <div class="field"><label for="f_fine">Ora fine <span class="req">*</span></label><input id="f_fine" name="fine" required="" type="time"/></div>
@@ -417,6 +446,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div class="field"><label for="f_comune">Comune <span class="req">*</span></label><input id="f_comune" name="comune" required=""/></div><div class="field"><label for="f_cantiere">Cantiere <span class="req">*</span></label><select id="f_cantiere" name="cantiere" required=""><option value="">Seleziona</option><option>Milano</option><option>Torino</option><option>Sondrio</option><option>Liguria</option></select></div>
 
 </div></section>
+<fieldset class="r-attiv" id="rAttiv">
 <section><h2><span class="num">2</span>Opere civili</h2>
 <div class="field"><label>È stato eseguito uno scavo? <span class="req">*</span></label><div class="choice"><label><input name="scavo" required="" type="radio" value="si"/> Sì</label><label><input name="scavo" type="radio" value="no"/> No</label></div></div>
 <div class="grid conditional hidden" id="scavoFields">
@@ -433,6 +463,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <section><h2><span class="num">5</span>Diramatore</h2><div class="field"><label>Collegamento a diramatore? <span class="req">*</span></label><div class="choice"><label><input name="diramatore" required="" type="radio" value="si"/> Sì</label><label><input name="diramatore" type="radio" value="no"/> No</label><label><input name="diramatore" type="radio" value="na"/> Non applicabile</label></div></div>
 <div class="grid conditional hidden" id="dirFields"><div class="field"><label for="f_cod_dir">Nome / codice diramatore <span class="cond">**</span></label><input data-cond-required="" id="f_cod_dir" name="cod_dir"/></div><div class="field"><label for="f_ubic_dir">Posizione <span class="cond">**</span></label><input data-cond-required="" id="f_ubic_dir" name="ubic_dir"/></div><div class="field full"><label for="f_dir_coord">Coordinate <span class="cond">**</span></label><div class="gps-row"><input id="f_dir_coord" name="dir_coord" inputmode="decimal" placeholder="es. 46.170123, 9.871234" data-coord="" data-cond-required=""/><button class="secondary no-print gps-btn" data-gps-for="f_dir_coord" type="button">📍 Rileva</button></div><div class="gps-status no-print" data-gps-status="f_dir_coord">Premi “Rileva” davanti al diramatore per inserire la posizione GPS, oppure scrivi le coordinate.</div></div><div class="field"><label for="f_io_dir">Ingresso / uscita utilizzata <span class="cond">**</span></label><input data-cond-required="" id="f_io_dir" name="io_dir"/></div><div class="field"><label for="f_note_dir">Note</label><input id="f_note_dir" name="note_dir"/></div></div>
 <div class="section-photo-area"><h3 class="photo-area-title">Fotografia diramatore</h3><div class="photo-grid"><div class="photo" id="box_dir"><h3>Diramatore <span class="cond">** se collegato</span></h3><small>Nome o codice chiaramente leggibile.</small><div class="camera-hint no-print">Tocca il pulsante per aprire la fotocamera posteriore del cellulare o scegliere una o più foto già presenti.</div><label class="camera-button no-print" for="foto_dir">📷 Scatta o carica foto</label><input accept="image/*" aria-label="Apri fotocamera o seleziona una foto" class="photo-input visually-hidden-input" id="foto_dir" name="foto_dir" type="file"/><img alt="Diramatore" class="preview"/></div></div></div></section>
+</fieldset>
 <section id="materialiSection"><h2><span class="num">6</span>Materiali installati e seriali</h2><p class="section-intro">Inserire tutti i materiali installati (es. ONT, borchia, modem). Per ognuno scattare la foto dell’etichetta: il codice a barre viene letto in automatico e il seriale compilato. Verificare sempre il valore letto.</p><div id="materials"></div><button class="secondary add-material no-print" onclick="addMaterial()" type="button">+ Aggiungi materiale</button></section>
 <section><h2><span class="num">7</span>Esito tecnico e firme</h2><div class="grid">
 <div class="field"><label for="f_completata">Attività completata? <span class="req">*</span></label><select id="f_completata" name="completata" required=""><option value="">Seleziona</option><option>Sì</option><option>No</option><option>Parzialmente</option></select></div>
@@ -441,6 +472,7 @@ input[type=date]::-webkit-calendar-picker-indicator,input[type=time]::-webkit-ca
 <div class="field"><label for="f_compilatore">Compilatore <span class="req">*</span></label><input id="f_compilatore" name="compilatore" required=""/></div><div class="field"><label for="f_caposquadra">Caposquadra / responsabile <span class="req">*</span></label><input id="f_caposquadra" name="caposquadra" required=""/></div><div class="field"><label for="f_data_comp">Data compilazione <span class="req">*</span></label><input id="f_data_comp" name="data_comp" required="" type="date"/></div>
 </div></section>
 <section class="validation"><h2>Validazione obbligatoria</h2><p><b>Generando il PDF si dichiara che:</b></p><div class="choice"><label><input name="dichiarazione" required="" type="checkbox"/> I dati corrispondono all’attività svolta e le foto si riferiscono allo stesso Codice OLO / W.O.</label><label><input name="leggibili" required="" type="checkbox"/> Le fotografie sono nitide e gli identificativi sono leggibili.</label></div></section>
+</div>
 </form>
 <div id="rreport" class="report" aria-hidden="true"></div>
 <div id="rxme" class="xme-overlay no-print" hidden role="dialog" aria-modal="true" aria-labelledby="rxmeTitle">
@@ -666,6 +698,10 @@ const form=document.getElementById('reportForm'), statusBox=document.getElementB
 function val(name){const e=form.elements[name]; if(!e)return ''; if(e instanceof RadioNodeList)return e.value; return e.value}
 function toggleByRadio(name,box){const on=val(name)==='si'; document.getElementById(box).classList.toggle('hidden',!on); document.querySelectorAll('#'+box+' [data-cond-required]').forEach(e=>e.required=on)}
 function toggleBySelect(id,box){const on=document.getElementById(id).value==='si'; document.getElementById(box).classList.toggle('hidden',!on); document.querySelectorAll('#'+box+' [data-cond-required]').forEach(e=>e.required=on)}
+function rApplyTipo(){const t=rTxt('tipo_att'),body=document.getElementById('rBody'),att=document.getElementById('rAttiv');
+ body.hidden=!t;document.getElementById('rTipoHint').hidden=!!t;att.hidden=att.disabled=t!=='Attivazione';
+ let n=0;form.querySelectorAll('section').forEach(sec=>{const num=sec.querySelector(':scope>h2>.num');if(!num)return;if(sec.closest('[hidden]'))return;num.textContent=++n})}
+form.addEventListener('change',rApplyTipo);rApplyTipo();
 form.addEventListener('change',()=>{toggleByRadio('scavo','scavoFields');toggleByRadio('cavo_usato','caviFields');toggleByRadio('diramatore','dirFields');toggleByRadio('roe_xme_diverso','roeXmeFields')});
 
 /* Controllo qualità foto: scarta immagini nere, uniformi o senza dettagli (obiettivo coperto) */
@@ -797,24 +833,24 @@ function junkReason(el){const s=(el.value||'').trim();if(!s)return 'campo obblig
 function fieldLabel(el){const l=el.closest('.field')?.querySelector('label');const g=el.closest('[data-subgroup]');return (g?g.dataset.subgroup+' – ':'')+(l?l.textContent.replace(/\*+/g,'').trim():el.name)}
 function clearJunk(el){el.classList.remove('junk');el.closest('.field')?.querySelector('.junk-msg')?.remove()}
 function checkJunk(){form.querySelectorAll('.junk').forEach(clearJunk);let first=null,n=0;
- form.querySelectorAll('input:not([type]),input[type=text],textarea').forEach(el=>{if(!el.required)return;const r=junkReason(el);if(!r)return;n++;el.classList.add('junk');
+ form.querySelectorAll('input:not([type]),input[type=text],textarea').forEach(el=>{if(!el.required||el.matches(':disabled'))return;const r=junkReason(el);if(!r)return;n++;el.classList.add('junk');
   const m=document.createElement('div');m.className='junk-msg no-print';m.textContent=r.charAt(0).toUpperCase()+r.slice(1);el.insertAdjacentElement('afterend',m);if(!first)first=el});
  if(!first)return true;return error((n===1?'1 campo contiene':n+' campi contengono')+' valori non validi. Primo da correggere: "'+fieldLabel(first)+'".',first)}
 form.addEventListener('input',e=>{if(e.target.classList.contains('junk')&&!junkReason(e.target))clearJunk(e.target)});
-function validateAll(){statusBox.className='status';statusBox.textContent='';if(!form.checkValidity()){const e=form.querySelector(':invalid');form.reportValidity();return error('Compilare tutti i campi obbligatori evidenziati.',e)}
+function validateAll(){statusBox.className='status';statusBox.textContent='';if(!form.checkValidity()){const e=form.querySelector('input:invalid,select:invalid,textarea:invalid');form.reportValidity();return error('Compilare tutti i campi obbligatori evidenziati.',e)}
  if(!checkJunk())return false;
- for(const el of form.querySelectorAll('[data-coord]')){if(!el.required)continue;const r=coordReasonR(el.value);if(r){el.classList.add('junk');const m=document.createElement('div');m.className='junk-msg no-print';m.textContent=r;el.closest('.field').querySelector('.junk-msg')?.remove();el.closest('.field').appendChild(m);return error('Coordinate non valide in "'+fieldLabel(el)+'".',el)}}
+ for(const el of form.querySelectorAll('[data-coord]')){if(!el.required||el.matches(':disabled'))continue;const r=coordReasonR(el.value);if(r){el.classList.add('junk');const m=document.createElement('div');m.className='junk-msg no-print';m.textContent=r;el.closest('.field').querySelector('.junk-msg')?.remove();el.closest('.field').appendChild(m);return error('Coordinate non valide in "'+fieldLabel(el)+'".',el)}}
  
  const mats=[...document.querySelectorAll('.material')];if(!mats.length){addMaterial();return error('Inserire almeno un materiale installato.',document.querySelector('.material input'))}
  for(const m of mats){const fi=m.querySelector('.photo-input');if(!fi.files.length)return error('Allegare la foto dell’etichetta per '+m.querySelector('.material-head strong').textContent.toLowerCase()+'.',fi)}
- const reqPhotos=[['foto_roe_aperto','la foto del ROE aperto'],['foto_roe_chiuso','la foto del ROE chiuso'],['foto_perm','la foto della porta del permutatore CNO'],['foto_split','la foto della porta dello splitter CNO'],['foto_id','la foto dell’ID risorsa installata al CNO']];if(val('scavo')==='si')reqPhotos.push(['foto_scavo','la foto dello scavo']);if(val('diramatore')==='si')reqPhotos.push(['foto_dir','la foto del diramatore']);for(const [n,label] of reqPhotos){if(!form.elements[n].files.length)return error('Allegare '+label+'.',form.elements[n])}return true}
+ const reqPhotos=rTxt('tipo_att')==='Migrazione'?[]:[['foto_roe_aperto','la foto del ROE aperto'],['foto_roe_chiuso','la foto del ROE chiuso'],['foto_perm','la foto della porta del permutatore CNO'],['foto_split','la foto della porta dello splitter CNO'],['foto_id','la foto dell’ID risorsa installata al CNO']];if(rTxt('tipo_att')!=='Migrazione'&&val('scavo')==='si')reqPhotos.push(['foto_scavo','la foto dello scavo']);if(rTxt('tipo_att')!=='Migrazione'&&val('diramatore')==='si')reqPhotos.push(['foto_dir','la foto del diramatore']);for(const [n,label] of reqPhotos){if(!form.elements[n].files.length)return error('Allegare '+label+'.',form.elements[n])}return true}
 /* ---------- Riscontro: report (PDF) e testo XME ---------- */
 function rTxt(n){const e=form.elements[n];if(!e)return '';if(e instanceof RadioNodeList)return e.value;return String(e.value||'').trim()}
 const rEsc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const rYN=v=>({si:'Sì',no:'No',na:'Non applicabile'}[v]||v);
 function rPhoto(id,cap){const i=document.getElementById(id);const box=i&&i.closest('.photo');if(!box)return [];const imgs=[...box.querySelectorAll('.preview')].filter(x=>x.getAttribute('src'));return imgs.map((x,k)=>({cap:imgs.length>1?cap+' '+(k+1):cap,src:x.src}))}
 function rBuildReport(){
- const fd=d=>d?d.split('-').reverse().join('/'):'';const R={alerts:[]};
+ const fd=d=>d?d.split('-').reverse().join('/'):'';const R={alerts:[],tipo:rTxt('tipo_att')};R.mig=R.tipo==='Migrazione';
  R.hero={wo:rTxt('wo'),addr:rTxt('indirizzo')+', '+rTxt('comune'),data:fd(rTxt('data')),orario:rTxt('inizio')+' – '+rTxt('fine'),risorsa:rTxt('cliente'),tecnico:rTxt('tecnico'),squadra:rTxt('squadra'),cantiere:rTxt('cantiere')};
  const sc=rTxt('scavo')==='si';R.opere=[{l:'Scavo eseguito',v:sc?'Sì – '+rTxt('metri_scavo').replace('.',',')+' m':'No'}];
  if(sc){R.opere.push({l:'Superficie',v:rTxt('superficie'),lvl:1},{l:'Ripristino completato',v:rTxt('ripristino'),lvl:1});if(rTxt('note_scavo'))R.opere.push({l:'Note scavo',v:rTxt('note_scavo'),lvl:1})}
@@ -836,6 +872,7 @@ function rBuildReport(){
  R.foto=[{t:'Opere civili',p:sc?rPhoto('foto_scavo','Scavo'):[]},{t:'ROE',p:[...rPhoto('foto_roe_aperto','ROE aperto'),...rPhoto('foto_roe_chiuso','ROE chiuso')]},
   {t:'CNO',p:[...rPhoto('foto_perm','Porta permutatore'),...rPhoto('foto_split','Porta splitter'),...rPhoto('foto_id','ID risorsa installata')]},
   {t:'Diramatore',p:dr==='si'?rPhoto('foto_dir','Diramatore'):[]},{t:'Materiali installati',p:R.mat.flatMap(m=>m.srcs.map((src,k,a)=>({cap:'Materiale '+m.n+' – '+m.tipo+' ('+m.ser+')'+(a.length>1?' – foto '+(k+1):''),src})))}];
+ if(R.mig){R.alerts=[];R.foto=R.foto.filter(g=>g.t==='Materiali installati')}
  return R;
 }
 function rRenderReport(R){
@@ -845,20 +882,20 @@ function rRenderReport(R){
  const mat=`<table class="rp-table rp-fibre"><thead><tr><th>#</th><th>Tipo materiale</th><th>Barcode / seriale</th></tr></thead><tbody>${R.mat.map(m=>`<tr><td>${m.n}</td><td>${rEsc(m.tipo)}</td><td>${rEsc(m.ser)}</td></tr>`).join('')}</tbody></table>`;
  const H=R.hero;
  document.getElementById('rreport').innerHTML=
-  `<div class="rp-hero"><h1>Riscontro attività – ${rEsc(H.wo)}</h1><p class="rp-addr">${rEsc(H.addr)}</p><p class="rp-meta"><span>Data <b>${rEsc(H.data)}</b></span><span>Orario <b>${rEsc(H.orario)}</b></span><span>ID risorsa <b>${rEsc(H.risorsa)}</b></span><span>Tecnico <b>${rEsc(H.tecnico)}</b></span><span>Squadra / impresa <b>${rEsc(H.squadra)}</b></span><span>Cantiere <b>${rEsc(H.cantiere)}</b></span></p></div>`+
+  `<div class="rp-hero"><h1>Riscontro attività – ${rEsc(R.tipo)} – ${rEsc(H.wo)}</h1><p class="rp-addr">${rEsc(H.addr)}</p><p class="rp-meta"><span>Tipo attività <b>${rEsc(R.tipo)}</b></span><span>Data <b>${rEsc(H.data)}</b></span><span>Orario <b>${rEsc(H.orario)}</b></span><span>ID risorsa <b>${rEsc(H.risorsa)}</b></span><span>Tecnico <b>${rEsc(H.tecnico)}</b></span><span>Squadra / impresa <b>${rEsc(H.squadra)}</b></span><span>Cantiere <b>${rEsc(H.cantiere)}</b></span></p></div>`+
   (R.alerts.length?`<div class="rp-alert">⚠ ATTENZIONE${R.alerts.map(a=>`<div>• ${rEsc(a)}</div>`).join('')}</div>`:'')+
-  sec(1,'Opere civili',table(R.opere))+sec(2,'Cavi utilizzati',table(R.cavi))+sec(3,'ROE',table(R.roe))+sec(4,'CNO',table(R.cno))+
-  sec(5,'Diramatore',table(R.dir))+sec(6,'Materiali installati e seriali',mat)+sec(7,'Esito tecnico e firme',table(R.esito))+
+  (R.mig?[['Materiali installati e seriali',mat],['Esito tecnico e firme',table(R.esito)]]
+   :[['Opere civili',table(R.opere)],['Cavi utilizzati',table(R.cavi)],['ROE',table(R.roe)],['CNO',table(R.cno)],['Diramatore',table(R.dir)],['Materiali installati e seriali',mat],['Esito tecnico e firme',table(R.esito)]]).map((x,i)=>sec(i+1,x[0],x[1])).join('')+
   `<div class="rp-sec rp-gallery"><h3 class="rp-title"><span>📷</span>Documentazione fotografica</h3>${R.foto.filter(g=>g.p.length).map(g=>`<div class="rp-group"><h4 class="rp-sub">Foto · ${rEsc(g.t)}</h4>${pics(g.p)}</div>`).join('')}</div>`;
 }
 function rReportText(R){
  const L=[],H=R.hero,line=r=>L.push('  '.repeat(r.lvl||0)+r.l+': '+(r.v||'-'));
- L.push('RISCONTRO ATTIVITÀ – '+H.wo+' – '+H.data+' ('+H.orario+')');
+ L.push('RISCONTRO ATTIVITÀ – '+R.tipo.toUpperCase()+' – '+H.wo+' – '+H.data+' ('+H.orario+')');
  L.push('ID risorsa: '+H.risorsa+' – Cantiere: '+H.cantiere);
  L.push('Squadra: '+H.squadra+' – Tecnico: '+H.tecnico);
  L.push('Indirizzo: '+H.addr);
  const block=(t,rows)=>{L.push('');L.push(t);rows.forEach(line)};
- block('OPERE CIVILI',R.opere);block('CAVI UTILIZZATI',R.cavi);block('ROE',R.roe);block('CNO',R.cno);block('DIRAMATORE',R.dir);
+ if(!R.mig){block('OPERE CIVILI',R.opere);block('CAVI UTILIZZATI',R.cavi);block('ROE',R.roe);block('CNO',R.cno);block('DIRAMATORE',R.dir)}
  L.push('');L.push('MATERIALI INSTALLATI E SERIALI');R.mat.forEach(m=>L.push('Materiale '+m.n+': '+m.tipo+' – '+m.ser));
  block('ESITO TECNICO E FIRME',R.esito);
  return L.join('\n');
@@ -876,8 +913,8 @@ document.getElementById('rxmeCopy').addEventListener('click',async()=>{
  rXmeMsg.className='xme-msg '+(ok?'ok':'err');rXmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
 });
 async function rPrintReport(){
- const imgs=[...document.querySelectorAll('#rreport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):Promise.resolve()));
- const oldTitle=document.title;const olo=(val('wo')||'').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Rapporto attività squadra';
+ await fitPdfImages('#rreport');const imgs=[...document.querySelectorAll('#rreport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):Promise.resolve()));
+ const oldTitle=document.title;const olo=(val('wo')||'').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Rapporto attività squadra - '+(rTxt('tipo_att')||'');
  const restore=()=>{document.title=oldTitle;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);setTimeout(()=>window.print(),200)}
 document.getElementById('rxmePdf').addEventListener('click',()=>{rCloseXme();rPrintReport()});
 function generatePDF(){if(!validateAll())return;const R=rBuildReport();rRenderReport(R);statusBox.className='status ok';statusBox.textContent='Controllo completato. Copia il testo per XME e genera il PDF dalla finestra che si è aperta.';rOpenXme(rReportText(R))}
@@ -1151,7 +1188,7 @@ document.getElementById('sxmeCopy').addEventListener('click',async()=>{
  xmeMsg.className='xme-msg '+(ok?'ok':'err');xmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
 });
 async function printReport(){
- const imgs=[...root.querySelectorAll('#sreport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
+ await fitPdfImages('#sreport');const imgs=[...root.querySelectorAll('#sreport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
  const old=document.title,olo=val('wo').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Sopralluogo';
  const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
  setTimeout(()=>window.print(),200);
@@ -1404,7 +1441,7 @@ document.getElementById('bxmeCopy').addEventListener('click',async()=>{
  xmeMsg.className='xme-msg '+(ok?'ok':'err');xmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
 });
 async function printReport(){
- const imgs=[...root.querySelectorAll('#breport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
+ await fitPdfImages('#breport');const imgs=[...root.querySelectorAll('#breport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
  const old=document.title,olo=val('wo').trim().replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Blocco tecnico On Field';
  const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
  setTimeout(()=>window.print(),200);
@@ -1592,7 +1629,7 @@ document.getElementById('cxmeCopy').addEventListener('click',async()=>{
  xmeMsg.className='xme-msg '+(ok?'ok':'err');xmeMsg.textContent=ok?'✓ Testo copiato: ora puoi incollarlo in XME.':'Copia automatica non riuscita: tieni premuto sul testo, scegli “Seleziona tutto” e poi “Copia”.';
 });
 async function printReport(){
- const imgs=[...root.querySelectorAll('#creport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
+ await fitPdfImages('#creport');const imgs=[...root.querySelectorAll('#creport img')];await Promise.all(imgs.map(i=>i.decode?i.decode().catch(()=>{}):0));
  const old=document.title,olo=txt('wo').replace(/[\\/:*?"<>|]+/g,'-');document.title=olo+' - Cambio ROE-CNO-Civico';
  const restore=()=>{document.title=old;window.removeEventListener('afterprint',restore)};window.addEventListener('afterprint',restore);
  setTimeout(()=>window.print(),200);
